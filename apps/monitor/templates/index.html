@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .box {
+        border-style: solid;
+        border-width: 1px;
+        border-color: #dadada;
+        height: 100%;
+    }
+
+    .box2 {
+        height: 100%;
+    }
+
+    .s33 {
+        height: 33%;
+    }
+
+    .s25 {
+        height: 25%;
+    }
+
+    .geneRow {
+        height: 33%;
+        text-align: center;
+        align-items: center;
+        align-content: center;
+    }
+
+    .certBox {
+        border-style: solid;
+        border-width: 1px;
+        border-color: #dadada;
+        height: 50%;
+    }
+
+    .closeB{
+        background: rgba(50, 50, 50, 0.2);
+        border: none;   
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.2/dist/gridstack.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.2/dist/gridstack.all.js"></script>
+
+{% csrf_token %}
+
+<div class="grid-stack">
+
+    
+
+    {% for component in dashboard.component_set.all %}
+
+    {% with "components/"|add:component.widget.name|add:".html" as template %}
+
+    {% include template %}
+
+    {% endwith %}
+
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% include "mainScript/main.html" %}
+
+
+{% endblock %}

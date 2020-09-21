@@ -1,0 +1,134 @@
+<div id="{{component.id}}" class="grid-stack-item" data-gs-min-height="3" data-gs-min-width="3" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}" data-gs-height="{{component.h}}">
+    <div class="grid-stack-item-content card">
+        <div class="card-header {{component.vManager.color}}">
+            <div class="row">
+                <div class="col">
+                    <h3 class="card-title">
+                        {{component.title}}: Avg. Loss. Percentage
+                    </h3>
+                </div>
+                <div class="col">
+                    <h3 class="card-title float-right">
+                        {{component.vManager.name}}
+                    </h3>
+                </div>
+                <button class="closeB" onClick="remove({{component.id}})">X</button>
+            </div>           
+        </div>
+
+        <div class="card-body">
+            <div class="box2">
+
+                <div class="s25">
+                    <div class="row">
+                        <div class="col-10">State Platinum (0-0.9%):</div>
+                        <div class="col-2 text-right" id="lossPercentagePlatinumCounter{{component.id}}">10</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success progress-bar" role="progressbar" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" id="lossPercentagePlatinumBar{{component.id}}" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s25">
+                    <div class="row">
+                        <div class="col-10">State Gold (1-1.9%):</div>
+                        <div class="col-2 text-right" id="lossPercentageGoldCounter{{component.id}}">3</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-teal disabled progress-bar" role="progressbar" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" id="lossPercentageGoldBar{{component.id}}" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s25">
+                    <div class="row">
+                        <div class="col-10">State Silver (2-3.9%):</div>
+                        <div class="col-2 text-right" id="lossPercentageSilverCounter{{component.id}}">1</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning progress-bar" role="progressbar" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" id="lossPercentageSilverBar{{component.id}}" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s25">
+                    <div class="row">
+                        <div class="col-10">State Bronze (>4%):</div>
+                        <div class="col-2 text-right" id="lossPercentageBronzeCounter{{component.id}}">3</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger progress-bar" role="progressbar" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" id="lossPercentageBronzeBar{{component.id}}" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    update{{component.id}} = function(){
+
+        fetch('/api/tunnels/{{component.vManager.id}}/1.1.1.20')
+        .then(res => res.json())
+        .then(response => {
+
+                let total_ = response.length
+                let platinum_ = []
+                let gold_ = []
+                let silver_ = []
+                let bronze_ = []
+
+
+            response.forEach(element => {
+                    if (element.loss_percentage <= 0.9) {
+                        platinum_.push(element)
+                    }
+                    if (element.loss_percentage <= 1 && element.loss_percentage >= 1.9) {
+                        gold_.push(element)
+                    }
+                    if (element.loss_percentage <= 2 && element.loss_percentage >= 3.9) {
+                        silver_.push(element)
+                    }
+                    if (element.loss_percentage >= 4) {
+                        bronze_.push(element)
+                    }
+                })          
+            
+            
+            document.getElementById("lossPercentagePlatinumBar{{component.id}}").style.width = ((platinum_.length*100)/total_).toString()+'%';
+            document.getElementById("lossPercentagePlatinumCounter{{component.id}}").innerHTML = platinum_.length;
+                
+            document.getElementById("lossPercentageGoldBar{{component.id}}").style.width = ((gold_.length*100)/total_).toString()+'%';
+            document.getElementById("lossPercentageGoldCounter{{component.id}}").innerHTML = gold_.length;
+
+            document.getElementById("lossPercentageSilverBar{{component.id}}").style.width = ((silver_.length*100)/total_).toString()+'%';
+            document.getElementById("lossPercentageSilverCounter{{component.id}}").innerHTML = silver_.length;
+
+            document.getElementById("lossPercentageBronzeBar{{component.id}}").style.width = ((bronze_.length*100)/total_).toString()+'%';
+            document.getElementById("lossPercentageBronzeCounter{{component.id}}").innerHTML = bronze_.length;
+
+        });
+    }
+
+    update{{component.id}}();
+
+    setInterval(update{{component.id}}, 15000);
+
+    
+
+
+</script>

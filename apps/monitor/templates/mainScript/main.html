@@ -1,0 +1,33 @@
+<script>
+    var grid = GridStack.init();
+
+    grid.on('change', function (event, items) {
+
+        let data = new FormData();      
+        
+        let parsedData = []
+
+        items.forEach(element => {
+            parsedData.push({'id':element.el.id,'x':element.x,'y':element.y,'w':element.width,'h':element.height})
+        });   
+        
+        data.append('data', JSON.stringify(parsedData));
+        data.append('csrfmiddlewaretoken', "{{csrf_token}}");  
+
+        fetch(window.location.href + '/move', {
+            method: 'POST',
+            body: data,            
+            credentials: 'same-origin',
+        }
+        ).then(() => {
+
+        });
+    });
+
+    function remove(id) {
+        fetch(window.location.href + '/remove?wid=' + id, {}).then(() => {
+            window.location.href = window.location.href;
+        });
+    }
+
+</script>

@@ -1,0 +1,102 @@
+<div id="{{component.id}}" class="grid-stack-item" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}" data-gs-height="{{component.h}}">
+    <div class="grid-stack-item-content card">
+
+      <div class="card-header {{component.vManager.color}}">
+        <div class="row">
+            <div class="col">
+                <h3 class="card-title">
+                   Migrations SDWAN
+                </h3>
+            </div>
+            <div class="col">
+                <h3 class="card-title float-right">
+                    {{component.vManager.name}}
+                </h3>
+            </div>
+            <button class="closeB" onClick="remove({{component.id}})">X</button>
+        </div>
+       
+    </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+
+            <div class="form-group">
+              <form method="POST"  enctype="multipart/form-data" action="/api/operate/csv/" >
+                {% csrf_token %}
+                <label for="modeloSerial">Model/Serial:</label>
+                <input type="text" name="modeloSerial" class="form-control" id="modeloSerial" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Type</label>
+                <select class="form-control" name="tipo">
+                    <option value="1">Type 1</option>
+                    <option value="2">Type 2</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="hostName">Host name</label>
+                <input type="text" name="hostName" class="form-control" id="hostName" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="siteId">Site id:</label>
+                <input type="text" name="siteId" class="form-control" id="siteId" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="deviceIP">System ip:</label>
+                <input type="text" name="deviceIP" class="form-control" id="deviceIP" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="snmpLocation">SNMP Location:</label>
+                <input type="text" name="snmpLocation" class="form-control" id="snmpLocation" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="interfazMpls">WanLegacyMPLS:</label>
+                <input type="text" name="interfazMpls" class="form-control" id="interfazMpls" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="interfazInternet">WanLegacyInternet:</label>
+                <input type="text" name="interfazInternet" class="form-control" id="interfazInternet" placeholder="Model/Serial">
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="auto" value="mpls" class="form-check-input" id="autoIfMpls">
+                <label class="form-check-label" for="autoIfMpls">Speed auto int. MPLS</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" value="internet" name="auto" class="form-check-input" id="autoIfInternet">
+                <label class="form-check-label" for="autoIfInternet">Speed auto int. Internet</label>
+              </div>
+              <div class="form-group">
+                <label for="BWMpls">BW WAN MPLS:</label>
+                <input type="text" name="BWMpls" class="form-control" id="BWMpls" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="BWInternet">BW WAN INTERNET:</label>
+                <input type="text" name="BWInternet" class="form-control" id="BWInternet" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="latitude">Latitude:</label>
+                <input type="text" name="latitude" class="form-control" id="latitude" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="longitude">Longitude:</label>
+                <input type="text" name="longitude" class="form-control" id="longitude" placeholder="Model/Serial">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" name="txt" class="custom-file-input" id="exampleInputFile">
+                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                  </div>
+                  <div class="input-group-append">
+                    <span class="input-group-text">Upload</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-success text-right" type="submit">Generate</button>
+            </form>
+        </div>
+        
+
+    </div>
+</div>

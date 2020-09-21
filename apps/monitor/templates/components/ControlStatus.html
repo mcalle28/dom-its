@@ -1,0 +1,100 @@
+<div id="{{component.id}}" class="grid-stack-item" data-gs-min-height="3" data-gs-min-width="2" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}" data-gs-height="{{component.h}}">
+    <div class="grid-stack-item-content card">
+
+        <div class="card-header {{component.vManager.color}}">
+            <div class="row">
+                <div class="col">
+                    <h3 class="card-title">
+                        Control Status
+                    </h3>
+                </div>
+                <div class="col">
+                    <h3 class="card-title float-right">
+                        {{component.vManager.name}}
+                    </h3>
+                </div>
+                <button class="closeB" onClick="remove({{component.id}})">X</button>
+            </div>
+           
+        </div>
+
+        <div class="card-body">
+            <div class="box2">
+
+                <div class="s33">
+                    <div class="row">
+                        <div class="col-10">Control Up:</div>
+                        <div class="col-2 text-right" id="controlStatusUpCounter{{component.id}}">10</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success progress-bar" role="progressbar" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="controlStatusUpBar{{component.id}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s33">
+                    <div class="row">
+                        <div class="col-10">Control Partial:</div>
+                        <div class="col-2 text-right" id="controlStatusPartialCounter{{component.id}}">3</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning progress-bar" role="progressbar" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" style="width: 33%" id="controlStatusPartialBar{{component.id}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s33">
+                    <div class="row">
+                        <div class="col-10">Control Down:</div>
+                        <div class="col-2 text-right" id="controlStatusDownCounter{{component.id}}">1</div>
+                        
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger progress-bar" role="progressbar" id="controlStatusDownBar{{component.id}}" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    update{{component.id}} = function(){
+            fetch('/api/wanEdgeHealth/{{component.vManager.id}}')
+        .then(res => res.json())
+        .then(response => {
+
+            var total = response.count
+            var up = response.statusList[0].count;
+            var partial = response.statusList[1].count;
+            var down = response.statusList[2].count;
+            
+            
+            document.getElementById("controlStatusUpBar{{component.id}}").style.width = ((up*100)/total).toString()+'%';
+            document.getElementById("controlStatusUpCounter{{component.id}}").innerHTML = up;
+                
+            document.getElementById("controlStatusPartialBar{{component.id}}").style.width = ((partial*100)/total).toString()+'%';
+            document.getElementById("controlStatusPartialCounter{{component.id}}").innerHTML = partial;
+
+            document.getElementById("controlStatusDownBar{{component.id}}").style.width = ((down*100)/total).toString()+'%';
+            document.getElementById("controlStatusDownCounter{{component.id}}").innerHTML = down;
+
+        });
+    }
+
+    update{{component.id}}();
+
+    setInterval(update{{component.id}}, 15000);
+
+    
+
+
+</script>

@@ -1,0 +1,101 @@
+<div id="{{component.id}}" class="grid-stack-item" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}" data-gs-height="{{component.h}}">
+    <div class="grid-stack-item-content card">
+
+        <div class="card-header {{component.vManager.color}}">
+            <div class="row">
+                <div class="col">
+                    <h3 class="card-title">
+                        Wan Edge Health
+                    </h3>
+                </div>
+                <div class="col">
+                    <h3 class="card-title float-right">
+                        {{component.vManager.name}}
+                    </h3>
+                </div>
+                <button class="closeB" onClick="remove({{component.id}})">X</button>
+            </div>
+           
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body ">
+            <div class="row box2 align-items-center">
+                <div class="col">
+                    <div class="text-center" id="wehNormal{{component.id}}"></div>
+                    <div class="text-center">Normal</div>
+                </div>
+                <div class="col">
+                    <div class="text-center" id="wehWarning{{component.id}}"></div>
+                    <div class="text-center">Warning</div>
+                </div>
+                <div class="col">                    
+                    <div class="text-center" id="wehError{{component.id}}"></div>
+                    <div class="text-center">Error</div>
+                </div>
+            </div>
+                     
+
+        </div>
+        <!-- /.card-body -->
+
+    </div>
+</div>
+{% load static %}
+<script src="{% static 'plugins/radial/radial.min.js' %}"></script>
+
+<script>    
+    $('#wehNormal{{component.id}}').radialIndicator(
+        {
+        barColor: '#28a745',
+        barWidth: 5,
+        initValue: 0,
+        roundCorner : true,
+        percentage: true
+    }
+    );
+    $('#wehWarning{{component.id}}').radialIndicator(
+        {
+        barColor: '#ffc107',
+        barWidth: 5,
+        initValue: 0,
+        roundCorner : true,
+        percentage: true
+    }
+    );
+    $('#wehError{{component.id}}').radialIndicator(
+        {
+        barColor: '#dc3545',
+        barWidth: 5,
+        initValue: 0,
+        roundCorner : true,
+        percentage: true
+    }
+    );
+
+
+    update{{component.id}} = function () {
+
+        fetch('/api/wanEdgeHealth/{{component.vManager.id}}')
+        .then(res => res.json())
+        .then(response => {
+
+            var total = response.count
+        
+            wehNormal{{component.id}}.animate( (response.statusList[0].count * 100)/total );
+            wehWarning{{component.id}}.animate( (response.statusList[1].count * 100)/total );
+            wehError{{component.id}}.animate( (response.statusList[2].count * 100)/total );
+        }
+        )
+    
+    }
+
+    update{{component.id}}();
+
+    var wehNormal{{component.id}} = $('#wehNormal{{component.id}}').data('radialIndicator');
+    var wehWarning{{component.id}} = $('#wehWarning{{component.id}}').data('radialIndicator');
+    var wehError{{component.id}} = $('#wehError{{component.id}}').data('radialIndicator');
+
+    setInterval(update{{component.id}}, 15000);
+
+
+</script>

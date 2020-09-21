@@ -1,0 +1,81 @@
+<div id="{{component.id}}" class="grid-stack-item" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" 
+data-gs-width="{{component.w}}" data-gs-height="{{component.h}}"
+data-gs-min-width="3" data-gs-min-height="3">
+    <div class="grid-stack-item-content card">
+
+        <div class="card-header {{component.vManager.color}}">
+            <div class="row">
+                <div class="col">
+                    <h3 class="card-title">
+                        DIA Monitoring
+                    </h3>
+                </div>
+                <div class="col">
+                    <h3 class="card-title float-right">
+                        {{component.vManager.name}}                        
+                    </h3>
+                </div>
+                <button class="closeB" onClick="remove({{component.id}})">X</button>
+            </div>          
+           
+        </div>
+
+        <div class="card-body">
+            <div class="box2">
+                
+
+                
+                    <div class="row">
+                        <div class="col-12">DIA Status: <span class="badge bg-success">ON</span> </div>
+                        
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-12 text-center">Sites DIA internet down</div>
+                        <div class="col-12 text-center">
+                            <select id="diaMon{{component.id}}" multiple class="form-control">
+                                
+                            </select>
+                        </div>
+                    </div>
+
+                    
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    update{{component.id}} = function(){
+
+        fetch('/api/webhook/{{component.vManager.id}}/')
+        .then(res => res.json())
+        .then(response => {               
+            
+            select = document.getElementById('diaMon{{component.id}}');
+            select.innerHTML = "";
+            for (var i in response.data){
+
+                var opt = document.createElement('option');
+                opt.innerHTML = response.data[i];
+                select.appendChild(opt);
+
+            }         
+
+        });
+    }
+
+    update{{component.id}}();
+
+    setInterval(update{{component.id}}, 15000);
+
+    
+
+
+</script>

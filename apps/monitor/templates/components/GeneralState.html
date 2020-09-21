@@ -1,0 +1,234 @@
+<div id="{{component.id}}" class="grid-stack-item" data-gs-min-height="3" data-gs-min-width="3" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}"
+    data-gs-height="{{component.h}}">
+    <div class="grid-stack-item-content card">
+
+        <div class="card-header  {{component.vManager.color}}">
+            <div class="row">
+                <div class="col">
+                    <h3 class="card-title">
+                        General State
+                    </h3>
+                </div>
+                <div class="col">
+                    <h3 class="card-title float-right">
+                        {{component.vManager.name}}
+                    </h3>
+                </div>
+                <button class="closeB" onClick="remove({{component.id}})">X</button>
+            </div>
+
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="row" style="height: 100%;">
+                <div class="box col-md">
+                    {% load static %}
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <img src="{% static 'img/vManage.png'%}">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <i class="fas fa-angle-up"></i>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    1
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">Vmanager</div>
+                    </div>
+
+
+                </div>
+
+                <div class="box col-md">
+                    {% load static %}
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <img src="{% static 'img/WAN Edge.png'%}">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <i class="fas fa-angle-up"></i>
+                                </div>
+                                <div class="col">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div id="generalStatusWanEdge{{component.id}}" class="col">
+                                    0
+                                </div>
+                                <div id="generalStatusWanEdgeDown{{component.id}}" class="col">
+                                    0
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">Wan edge</div>
+                    </div>
+
+
+                </div>
+
+                <div class="box col-md">
+                    {% load static %}
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <img src="{% static 'img/vBond.png'%}">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <i class="fas fa-angle-up"></i>
+                                </div>
+                                <div class="col">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div id="generalStatusVBond{{component.id}}" class="col">
+                                    0
+                                </div>
+                                <div id="generalStatusVBondDown{{component.id}}" class="col">
+                                    0
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">VBond</div>
+                    </div>
+
+
+                </div>
+
+                <div class="box col-md">
+                    {% load static %}
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <img src="{% static 'img/vSmart.png'%}">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <i class="fas fa-angle-up"></i>
+                                </div>
+                                <div class="col">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div id="generalStatusVSmart{{component.id}}" class="col">
+                                    0
+                                </div>
+                                <div id="generalStatusVSmartDown{{component.id}}" class="col">
+                                    0
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center geneRow">
+                        <div class="col">Vsmart</div>
+                    </div>
+
+
+                </div>
+
+                <div class="box col-md">
+                    <div class="row box2">
+                        <div class="col">
+                            <div class="certBox align-items-center row">
+                                <div class="col-10">
+                                    <b>Reboot</b><br>
+                                    <small>Last 24h</small>
+                                </div>
+                                <div class="col-2">
+                                    1
+                                </div>
+                            </div>
+                            <div class="align-items-center row">
+                                <div class="col-10">
+                                    <p><i class="fas fa-medal"></i> 1<br><small>Warnings</small></p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+
+
+    update{{component.id}} = function() {
+        fetch('/api/generalState/{{component.vManager.id}}')
+            .then(res => res.json())
+            .then(response => {
+
+
+                var vSmartTotal = response[0].count;
+                var vSmarDown = response[0].statusList[0].count;
+
+                var wanEdgeTotal = response[1].count;
+                var wanEdgeDown = response[1].statusList[0].count;
+
+                var vBondTotal = response[2].count;
+                var vBondDown = response[2].statusList[0].count;
+
+                document.getElementById("generalStatusWanEdge{{component.id}}").innerHTML = wanEdgeTotal - wanEdgeDown;
+                document.getElementById("generalStatusVBond{{component.id}}").innerHTML = vBondTotal - vBondDown;
+                document.getElementById("generalStatusVSmart{{component.id}}").innerHTML = vSmartTotal - vSmarDown;
+
+                document.getElementById("generalStatusWanEdgeDown{{component.id}}").innerHTML = wanEdgeDown;
+                document.getElementById("generalStatusVBondDown{{component.id}}").innerHTML = vBondDown;
+                document.getElementById("generalStatusVSmartDown{{component.id}}").innerHTML = vSmarDown;
+
+
+            });
+    }
+
+    update{{component.id}}();
+
+    setInterval(update{{component.id}}, 15000);
+
+
+
+
+</script>

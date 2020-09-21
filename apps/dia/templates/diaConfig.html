@@ -1,0 +1,81 @@
+{% extends "diaBase.html" %}
+
+{% block content %}
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Direct Internet Access Configuration</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">DashBoard</a></li>
+            <li class="breadcrumb-item active">D.I.A. Config</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                
+                <div class="card card-primary card-outline">
+                    <div class="card-body">
+                        <h5 class="card-header">
+
+                          <div class="row">
+                            <div class="col">
+                                <h3 class="card-title">
+                                    Active DIA:
+                                </h3>
+                            </div>
+                            <div class="col">
+                                <h3 class="card-title float-right">
+                                    <a class="btn text-white btn-primary">
+                                      Add new
+                                    </a>                       
+                                </h3>
+                            </div>
+                          
+                        </h5>
+
+                        <p class="card-text">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th style="width: 10px">id</th>
+                                <th>Vmanager</th>
+                                <th>ip</th>
+                                <th>webhook</th>
+                                <th style="width: 40px">DIA</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>13</td>
+                                <td>ITS test</td>
+                                <td>vmanage-930412.viptela.net</td>
+                                <td>http://dom-its.com/dia/webhook/FEW097ASWFG7865BMH89N89896</td>
+                                <td><span class="badge bg-success"><a href="1">ON</a></span></td>
+                              </tr>
+                              
+                            </tbody>
+                          </table>                     
+                        </p> 
+                    </div>
+                </div><!-- /.card -->
+            </div>
+            <!-- /.col-md-6 -->
+           
+            <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+{%endblock%}
