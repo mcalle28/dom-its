@@ -2,7 +2,7 @@
     data-gs-height="{{component.h}}">
     <div class="grid-stack-item-content card">
 
-        <div class="card-header  {{component.vManager.color}}">
+        <div class="card-header  {{component.vManager.color.color}}">
             <div class="row">
                 <div class="col">
                     <h3 class="card-title">
@@ -71,7 +71,7 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div id="generalStatusWanEdge{{component.id}}" class="col">
+                                <div onclick="showTable{{component.id}}('vedge')" id="generalStatusWanEdge{{component.id}}" class="col">
                                     0
                                 </div>
                                 <div id="generalStatusWanEdgeDown{{component.id}}" class="col">
@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div id="generalStatusVBond{{component.id}}" class="col">
+                                <div onclick="showTable{{component.id}}('vbond')" id="generalStatusVBond{{component.id}}" class="col">
                                     0
                                 </div>
                                 <div id="generalStatusVBondDown{{component.id}}" class="col">
@@ -145,7 +145,7 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div id="generalStatusVSmart{{component.id}}" class="col">
+                                <div onclick="showTable{{component.id}}('vsmart')" id="generalStatusVSmart{{component.id}}" class="col">
                                     0
                                 </div>
                                 <div id="generalStatusVSmartDown{{component.id}}" class="col">
@@ -171,13 +171,15 @@
                                     <b>Reboot</b><br>
                                     <small>Last 24h</small>
                                 </div>
-                                <div class="col-2">
+                                <div id="reboots{{component.id}}" class="col-4">
                                     1
                                 </div>
                             </div>
                             <div class="align-items-center row">
                                 <div class="col-10">
-                                    <p><i class="fas fa-medal"></i> 1<br><small>Warnings</small></p>
+                                    <p><i class="fas fa-medal"></i>
+                                         <div id="certificates{{component.id}}" class="">1</div>
+                                         <br><small>Warnings</small></p>
                                 </div>
 
                             </div>
@@ -222,6 +224,7 @@
 
 
             });
+        
     }
 
     update{{component.id}}();
@@ -229,6 +232,58 @@
     setInterval(update{{component.id}}, 15000);
 
 
+    fetch('/api/certificate/{{component.vManager.id}}')
+            .then(res => res.json())
+            .then(response => {
+                document.getElementById("certificates{{component.id}}").innerHTML = response.warning;
+    });
+
+    fetch('/api/reboot/{{component.vManager.id}}')
+            .then(res => res.json())
+            .then(response => {
+                document.getElementById("reboots{{component.id}}").innerHTML = response.count;
+    });
 
 
+
+
+
+</script>
+
+
+
+<script>
+
+    function showTable{{component.id}}(personality) { 
+        
+        table.clearData();
+
+        $('#detailTableModal').modal('toggle');
+
+        fetch('/api/reachable/{{component.vManager.id}}?personality='+personality)
+        .then(response => response.json())
+        .then(data => {          
+           
+            document.getElementById('detailTableTitle').innerHTML = 'General state '+personality;
+            table.setData(data);
+
+            table.setColumns([
+                {title:"Device Model", field:"device-model", sorter:"string"},
+                {title:"Device Id", field:"deviceId", sorter:"string"},
+                {title:"State", field:"state", sorter:"string"},
+                {title:"Control Connections Up", field:"controlConnectionsUp", sorter:"string"},
+                {title:"Site Id", field:"site-id", sorter:"number"},
+
+            ]);
+
+            
+
+        
+        });  
+    
+
+        
+    };
+
+    
 </script>

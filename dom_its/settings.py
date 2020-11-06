@@ -31,7 +31,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
     'apps.monitor',
+    'apps.manage',
     'apps.dia',
     'apps.api',
     'django.contrib.admin',
@@ -40,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'microsoft_auth',
+
 ]
 
 MIDDLEWARE = [
@@ -60,11 +65,12 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
+            'context_processors': [                
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'microsoft_auth.context_processors.microsoft',
             ],
         },
     },
@@ -87,6 +93,19 @@ DATABASES = {
     }
 }
 
+
+AUTHENTICATION_BACKENDS = [
+    'microsoft_auth.backends.MicrosoftAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend' # if you also want to use Django's authentication
+    # I recommend keeping this with at least one database superuser in case of unable to use others
+]
+
+
+
+MICROSOFT_AUTH_CLIENT_ID = '370734e9-b7dc-4755-a857-58c484ae0873'
+MICROSOFT_AUTH_CLIENT_SECRET = 'x_qYnIiD1652Z_.5-4wHwdgG_2aPX_6D6B'
+
+MICROSOFT_AUTH_LOGIN_TYPE = 'ma'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -118,7 +137,9 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+
+SITE_ID = 1
 
 
 # Static files (CSS, JavaScript, Images)

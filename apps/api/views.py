@@ -5,7 +5,7 @@ from .migration import migration
 from .base import baseTipo1, titulosTipo1, titulosTipo2, baseTipo2
 from .Sdwan import Sdwan
 
-from ..monitor.models import VManager, Webhook
+from ..monitor.models import VManager, Webhook, WebhookLog
 
 sdwan = Sdwan()
 
@@ -78,15 +78,25 @@ def index(request):
 def wanEdgeHealth(request, id):
     return JsonResponse (sdwan.wanEdgeHealth(id),safe=False)
 
+def wanEdgeHealthDetail(request, id):
+    personality = request.GET.get('personality','')
+    return JsonResponse (sdwan.wanEdgeHealthDetail(id, personality),safe=False)
+
+
 def controlStatus(request, id):
     return JsonResponse (sdwan.controlStatus(id),safe=False)
+
+def controlStatusDetail(request, id):
+    detail = request.GET.get('state')
+    return JsonResponse (sdwan.controlStatusDetail(id, detail),safe=False)
+
 
 def generalState(request, id):
     return JsonResponse (sdwan.generalState(id),safe=False)        
         
-def reachable(request, personality):
-    vm = request.GET.get('vm','')
-    return JsonResponse (sdwans[vm].reachable(personality), safe=False)
+def reachable(request, id):
+    personality = request.GET.get('personality','')
+    return JsonResponse (sdwan.reachable(id,personality), safe=False)
 
 def network(request,personality):
     vm = request.GET.get('vm','')
@@ -99,19 +109,18 @@ def health(request, personality):
     vm = request.GET.get('vm','')
     return JsonResponse(sdwans[vm].health(personality), safe=False)
 
-def cert(request):
-    pass
+def certificate(request, id):
+    return JsonResponse(sdwan.certificate(id),safe=False)
+
+def reboot(request, id):
+    return JsonResponse(sdwan.reboot(id),safe=False)
 
 def get(request):
     return JsonResponse(list(sdwans.keys()), safe=False)
 
 def webhook(request, id):
 
-    res = []
     vm = VManager.objects.get(id=id)
-    wh = Webhook.objects.filter(vManager=vm)
-
-    for item in wh:
-        res.append('[{0}] HostName: {1}, SystemIp: {2}, ({3})'.format(item.time, item.hostname,item.ip,item.message))
-
-    return JsonResponse({'data':res}, safe=False)
+    wh = WebhookLog.objects.filter(vManager=vm, inDia=False).values_list('siteId',flat=True)
+    
+    return JsonResponse(list(wh), safe=False)

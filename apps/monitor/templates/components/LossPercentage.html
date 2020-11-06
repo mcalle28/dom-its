@@ -1,6 +1,6 @@
 <div id="{{component.id}}" class="grid-stack-item" data-gs-min-height="3" data-gs-min-width="3" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}" data-gs-height="{{component.h}}">
     <div class="grid-stack-item-content card">
-        <div class="card-header {{component.vManager.color}}">
+        <div class="card-header {{component.vManager.color.color}}">
             <div class="row">
                 <div class="col">
                     <h3 class="card-title">
@@ -21,7 +21,7 @@
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Platinum (0-0.9%):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Platinum')" class="col-10">State Platinum (0-0.9%):</div>
                         <div class="col-2 text-right" id="lossPercentagePlatinumCounter{{component.id}}">10</div>
                         
                     </div>
@@ -34,7 +34,7 @@
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Gold (1-1.9%):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Gold')" class="col-10">State Gold (1-1.9%):</div>
                         <div class="col-2 text-right" id="lossPercentageGoldCounter{{component.id}}">3</div>
                         
                     </div>
@@ -47,7 +47,7 @@
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Silver (2-3.9%):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Silver')" class="col-10">State Silver (2-3.9%):</div>
                         <div class="col-2 text-right" id="lossPercentageSilverCounter{{component.id}}">1</div>
                         
                     </div>
@@ -60,7 +60,7 @@
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Bronze (>4%):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Bronze')" class="col-10">State Bronze (>4%):</div>
                         <div class="col-2 text-right" id="lossPercentageBronzeCounter{{component.id}}">3</div>
                         
                     </div>
@@ -82,7 +82,7 @@
 
     update{{component.id}} = function(){
 
-        fetch('/api/tunnels/{{component.vManager.id}}/1.1.1.20')
+        fetch('/api/tunnels/{{component.vManager.id}}/{{component.title}}')
         .then(res => res.json())
         .then(response => {
 
@@ -94,13 +94,13 @@
 
 
             response.forEach(element => {
-                    if (element.loss_percentage <= 0.9) {
+                    if (element.loss_percentage < 1) {
                         platinum_.push(element)
                     }
-                    if (element.loss_percentage <= 1 && element.loss_percentage >= 1.9) {
+                    if (element.loss_percentage <= 2 && element.loss_percentage > 1) {
                         gold_.push(element)
                     }
-                    if (element.loss_percentage <= 2 && element.loss_percentage >= 3.9) {
+                    if (element.loss_percentage <= 4 && element.loss_percentage > 2) {
                         silver_.push(element)
                     }
                     if (element.loss_percentage >= 4) {
@@ -126,9 +126,76 @@
 
     update{{component.id}}();
 
-    setInterval(update{{component.id}}, 15000);
-
+    setInterval(update{{component.id}}, 150000); 
     
 
 
+</script>
+
+
+
+<script>
+
+    function showTable{{component.id}}(kind) { 
+        
+        table.clearData();
+
+        $('#detailTableModal').modal('toggle');
+
+        fetch('/api/tunnels/{{component.vManager.id}}/{{component.title}}')
+        .then(response => response.json())
+        .then(data => {          
+           
+
+            table.setData(data);
+
+            table.setColumns([
+                {title:"Source IP", field:"src_ip", sorter:"string"},
+                {title:"Destination IP", field:"dst_ip", sorter:"string"},
+                {title:"Name", field:"name", sorter:"string"},
+                {title:"Local color", field:"local_color", sorter:"string"},
+                {title:"Loss Percentage (%)", field:"loss_percentage", sorter:"number"},
+
+            ]);
+
+            if(kind === "Platinum"){
+                document.getElementById('detailTableTitle').innerHTML = 'Loss Percentage State Platinum';
+                table.setFilter([
+                {field:"loss_percentage", type:">", value:0}, 
+                {field:"loss_percentage", type:"<", value:1}, 
+            ]);
+            return;
+            } else if (kind === "Gold"){
+                document.getElementById('detailTableTitle').innerHTML = 'Loss Percentage State Gold';
+                table.setFilter([
+                {field:"loss_percentage", type:">=", value:1}, 
+                {field:"loss_percentage", type:"<", value:2},
+                ]);
+            return;
+
+            } else if (kind === "Silver"){
+                document.getElementById('detailTableTitle').innerHTML = 'Loss Percentage State Silver';
+                table.setFilter([
+                {field:"loss_percentage", type:">=", value:2}, 
+                {field:"loss_percentage", type:"<", value:4},
+                ]);
+            return;
+
+            } else if (kind === "Bronze"){
+                document.getElementById('detailTableTitle').innerHTML = 'Loss Percentage State Bronze';
+                table.setFilter([
+                {field:"loss_percentage", type:">=", value:4},
+                ]);
+            return;
+
+            }
+
+        
+        });  
+    
+
+        
+    };
+
+    
 </script>

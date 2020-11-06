@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Admin</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">DashBoard</a></li>
+            <li class="breadcrumb-item active">Groups</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+
+
+
+            <div class="col-lg-12">
+                
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <h5 class="card-header">
+
+                          <div class="row">
+                            <div class="col">
+                                <h2 class="card-title">
+                                    DOM VManagers:
+                                </h2>
+                            </div>
+                            <div class="col">
+                                <h3 class="card-title float-right">
+                                  <a data-toggle="modal" data-target="#addNew" href="#" class="btn btn-primary"> Add new </a>       
+                                </h3>
+                            </div>
+                          
+                        </h5>
+
+                        <p class="card-text">
+                          <table id="vManagersTable" class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>ip</th>
+                                <th>user</th>
+                                <th>color</th>
+                               
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for vm in vms %}
+                              <tr>                                
+                                <td>{{vm.name}}</td>
+                                <td>{{vm.ip}}</td>
+                                <td>{{vm.user}}</td>  
+                                <td><a class="{{vm.color.color}}"></a></td> 
+                              </tr>
+                              {% endfor%}
+                              
+                            </tbody>
+                          </table>                     
+                        </p> 
+                    </div>
+                </div><!-- /.card -->
+            </div>
+
+
+
+            <div class="col-lg-12">
+                
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <h5 class="card-header">
+
+                          <div class="row">
+                            <div class="col">
+                                <h3 class="card-title">
+                                    DOM Users:
+                                </h3>
+                            </div>
+                            <div class="col">
+                                <h3 class="card-title float-right">
+                                  <a data-toggle="modal" data-target="#addNew" href="#" class="btn btn-primary"> Add new </a>       
+                                </h3>
+                            </div>
+                          
+                        </h5>
+
+                        <p class="card-text">
+                          <table id="usersTable" class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Is Admin</th>
+                                <th>Options</th>
+                               
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for user in users %}
+                              <tr>                                
+                                <td>{{user.userName}}</td>
+                                <td>{{user.isAdmin}}</td>
+                                <td>Options</td>  
+                              </tr>
+                              {% endfor%}
+                              
+                            </tbody>
+                          </table>                     
+                        </p> 
+                    </div>
+                </div><!-- /.card -->
+            </div>
+
+
+            <div class="col-lg-12">
+                
+                <div class="card card-primary ">
+                    <div class="card-body">
+                        <h5 class="card-header">
+
+                          <div class="row">
+                            <div class="col">
+                                <h3 class="card-title">
+                                    DOM Groups:
+                                </h3>
+                            </div>
+                            <div class="col">
+                                <h3 class="card-title float-right">
+                                  <a data-toggle="modal" data-target="#addNew" href="#" class="btn btn-primary"> Add new </a>       
+                                </h3>
+                            </div>
+                          
+                        </h5>
+
+                        <p class="card-text">
+                          <table id="groupsTable" class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Users</th>
+                                <th>Vmanagers</th>
+                               
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for gp in gps %}
+                              <tr>                                
+                                <td>{{gp.name}}</td>
+                                <td>{{gp.users | length}}</td>
+                                <td>{{gp.vManagers | length}}</td>  
+                              </tr>
+                              {% endfor%}
+                              
+                            </tbody>
+                          </table>                     
+                        </p> 
+                    </div>
+                </div><!-- /.card -->
+            </div>
+            <!-- /.col-md-6 -->
+           
+            <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            
+            <div class="form-group">
+              <label class="col-form-label">Name</label>
+              <input class="form-control" placeholder="Group name" />
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {%load static%}
+   <!-- Tabulator -->
+   <link rel="stylesheet" href="{% static 'plugins/tabulator/dist/css/tabulator.min.css' %}">
+
+    <!-- Tabulator -->
+    <script src="{% static 'plugins/tabulator/dist/js/tabulator.min.js' %}"></script>
+
+
+
+  <script>
+
+
+
+    var usersTable = new Tabulator("#usersTable", {
+        height:"311px",
+        responsiveLayout:"hide",
+        layout:"fitColumns",
+
+        
+    });
+
+
+    var vManagersTable = new Tabulator("#vManagersTable", {
+        height:"311px",
+        responsiveLayout:"hide",
+        layout:"fitColumns",
+
+        
+    });
+
+
+    var groupsTable = new Tabulator("#groupsTable", {
+        height:"311px",
+        responsiveLayout:"hide",
+        layout:"fitColumns",
+
+        
+    });
+
+
+  </script>
+
+
+{%endblock%}

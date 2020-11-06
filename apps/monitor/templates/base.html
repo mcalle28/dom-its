@@ -9,7 +9,7 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
+<!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css'%}">
   <!-- summernote -->
   <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.min.css'%}">
+  <!-- Tabulator -->
+  <link rel="stylesheet" href="{% static 'plugins/tabulator/dist/css/tabulator.min.css' %}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed'%}">
@@ -58,7 +60,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="/dashboard" class="brand-link">
         <i class="fa fa-cog"></i>DOM
         <span class="brand-text font-weight-light">- ITS</span>
       </a>
@@ -71,7 +73,7 @@
 
           </div>
           <div class="info">
-            <a href="#" class="d-block">Admin</a>
+            <a href="/manage" class="d-block">Admin</a>
           </div>
         </div>
 
@@ -105,9 +107,8 @@
 
                 {% for dash in dashboards %}
 
-
                 <li class="nav-item">
-                  <a href="{{dash.id}}" class="nav-link {% if dash.id in request.get_full_path %} active {%endif%}">
+                  <a href="{{dash.id}}" class="nav-link {% if dash.id|stringformat:'s' == request.path|slice:'11:' %} active {%endif%}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>{{dash.name}}</p>
                   </a>
@@ -142,41 +143,47 @@
                   </a>
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a data-toggle="modal" data-target="#modalGeneralState"
-                        class="nav-link">
+                      <a data-toggle="modal" data-target="#modalGeneralState" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>General State</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="#" class="nav-link" data-toggle="modal" data-target="#modalControlStatus" >
+                      <a href="#" class="nav-link" data-toggle="modal" data-target="#modalControlStatus">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Control Status</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a data-toggle="modal" data-target="#modalWanEdge"  class="nav-link">
+                      <a data-toggle="modal" data-target="#modalWanEdge" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Wan Edge Health</p>
                       </a>
                     </li>
 
                     <li class="nav-item">
-                      <a data-toggle="modal" data-target="#modalLatency"  href="#" class="nav-link">
+                      <a data-toggle="modal" data-target="#modalLatency" href="#" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Avg. Latency</p>
                       </a>
                     </li>
 
                     <li class="nav-item">
-                      <a data-toggle="modal" data-target="#modalLoss"  href="#" class="nav-link">
+                      <a data-toggle="modal" data-target="#modalJitter" href="#" class="nav-link">
+                        <i class="nav-icon far fa-plus-square"></i>
+                        <p>Avg. Jitter</p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a data-toggle="modal" data-target="#modalLoss" href="#" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Avg. Percentage Loss</p>
                       </a>
                     </li>
 
                     <li class="nav-item">
-                      <a data-toggle="modal" data-target="#modalDia"  href="#" class="nav-link">
+                      <a data-toggle="modal" data-target="#modalDia" href="#" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>DIA Mon.</p>
                       </a>
@@ -195,7 +202,7 @@
                   </a>
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a a data-toggle="modal" data-target="#modalMigration"  href="#" class="nav-link">
+                      <a a data-toggle="modal" data-target="#modalMigration" href="#" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Migration SDWAN</p>
                       </a>
@@ -216,8 +223,7 @@
                   </a>
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="/dia/config"
-                        class="nav-link">
+                      <a href="/dia/config" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Config. DIA</p>
                       </a>
@@ -248,8 +254,39 @@
             </ul>
           </li>
 
-          
-          
+          <li class="nav-header">DOM</li>
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-plus"></i>
+              <p>
+                Dashboard
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+
+
+              
+
+              <li class="nav-item">
+                <a data-toggle="modal" data-target="#modalAddDb" href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a data-toggle="modal" data-target="#modalAddDb" href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delete</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+
 
           </ul>
         </nav>
@@ -258,10 +295,58 @@
       <!-- /.sidebar -->
     </aside>
 
+
+
+
+        <!-- Modal -->
+<div class="modal fade" id="detailTableModal" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <div class="col-8">
+              <h5 class="modal-title" id="detailTableTitle">State platinum</h5>
+            </div>
+            <div class="col-3">
+              <input type="text" class="form-control" placeholder="Search" id="detailTableFilter"/>
+            </div>
+            <button type="button" class="col-1 close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+          <div id="detailTable"></div>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 
 
+
+    
 
       <!-- Main content -->
       <section class="content">
@@ -288,24 +373,24 @@
           </div>
           <form method="POST">
             {% csrf_token %}
-          <div class="modal-body">
-            
+            <div class="modal-body">
+
               <div class="form-group">
                 <input type="hidden" value="1" name="widget">
                 <label for="recipient-name" class="col-form-label">Vmanager:</label>
                 <select class="form-control" name="vm">
-                  {%for vm in vms%}
-                  <option value="{{vm.id}}">{{vm.name}}</option>
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
                   {% endfor %}
                 </select>
               </div>
-            
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Create</button>
-          </div>
-        </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -313,227 +398,356 @@
 
 
     <div class="modal fade" id="modalControlStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Control Status</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="4" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="modalWanEdge" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Wan Edge Health</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="2" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="modalDia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New DIA Monitor</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="7" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="modalLatency" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Avg. Latency</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="3" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">IP:</label>
+                <input type="text" name="title" class="form-control"></input>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalJitter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New Control Status</h5>
+          <h5 class="modal-title" id="exampleModalLabel">New Avg. Jitter</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <form method="POST">
           {% csrf_token %}
-        <div class="modal-body">
-          
+          <div class="modal-body">
+
             <div class="form-group">
-              <input type="hidden" value="4" name="widget">
+              <input type="hidden" value="8" name="widget">
               <label for="recipient-name" class="col-form-label">Vmanager:</label>
               <select class="form-control" name="vm">
-                {%for vm in vms%}
-                <option value="{{vm.id}}">{{vm.name}}</option>
+                {%for vm in request.session.vms%}
+                <option value="{{vm.pk}}">{{vm.fields.name}}</option>
                 {% endfor %}
               </select>
             </div>
-          
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Create</button>
-        </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">IP:</label>
+              <input type="text" name="title" class="form-control"></input>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
         </form>
       </div>
     </div>
   </div>
 
 
-  <div class="modal fade" id="modalWanEdge" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Wan Edge Health</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form method="POST">
-        {% csrf_token %}
-      <div class="modal-body">
-        
-          <div class="form-group">
-            <input type="hidden" value="2" name="widget">
-            <label for="recipient-name" class="col-form-label">Vmanager:</label>
-            <select class="form-control" name="vm">
-              {%for vm in vms%}
-            <option value="{{vm.id}}">{{vm.name}}</option>
-            {% endfor %}
-            </select>
+
+
+    <div class="modal fade" id="modalLoss" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Loss. Percentage</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="5" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">IP:</label>
+                <input type="text" name="title" class="form-control"></input>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
       </div>
-      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+
+
+
+    <div class="modal fade" id="modalMigration" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Wan Edge Health</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="6" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
       </div>
-      </form>
+    </div>
+
+
+
+
+    <div class="modal fade" id="modalAddVm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New VManager</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <label class="col-form-label">Vmanager:</label>
+                <input class="form-control" placeholder="Name for VManager">
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">IP:</label>
+                <input class="form-control" placeholder="Ex: vmanage-930412.viptela.net">
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Vmanager:</label>
+                <input class="form-control" placeholder="Name for VManager">
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">User name:</label>
+                <input class="form-control" placeholder="User name of an admin profile">
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Password:</label>
+                <input class="form-control" placeholder="Password">
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="modalAddDb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Dashboard</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            
+            <div class="form-group">
+              <label class="col-form-label">Name:</label>
+              <input name="dbName" class="form-control" placeholder="Name a new Dashboard">
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-
-
-<div class="modal fade" id="modalDia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">New DIA Monitor</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form method="POST">
-      {% csrf_token %}
-    <div class="modal-body">
-      
-        <div class="form-group">
-          <input type="hidden" value="7" name="widget">
-          <label for="recipient-name" class="col-form-label">Vmanager:</label>
-          <select class="form-control" name="vm">
-            {%for vm in vms%}
-            <option value="{{vm.id}}">{{vm.name}}</option>
-            {% endfor %}
-          </select>
-        </div>
-      
-    </div>
-    
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Create</button>
-    </div>
-    </form>
-  </div>
-</div>
-</div>
-
-
-<div class="modal fade" id="modalLatency" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">New Avg. Latency</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form method="POST">
-      {% csrf_token %}
-    <div class="modal-body">
-      
-        <div class="form-group">
-          <input type="hidden" value="3" name="widget">
-          <label for="recipient-name" class="col-form-label">Vmanager:</label>
-          <select class="form-control" name="vm">
-            {%for vm in vms%}
-            <option value="{{vm.id}}">{{vm.name}}</option>
-            {% endfor %}
-          </select>          
-        </div>
-        <div class="form-group">
-          <label for="recipient-name" class="col-form-label">IP:</label>
-          <input type="text" class="form-control"></input>
-        </div>
-      
-    </div>
-    
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Create</button>
-    </div>
-    </form>
-  </div>
-</div>
-</div>
-
-<div class="modal fade" id="modalLoss" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">New Loss. Percentage</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form method="POST">
-      {% csrf_token %}
-    <div class="modal-body">
-      
-        <div class="form-group">
-          <input type="hidden" value="5" name="widget">
-          <label for="recipient-name" class="col-form-label">Vmanager:</label>
-          <select class="form-control" name="vm">
-            {%for vm in vms%}
-            <option value="{{vm.id}}">{{vm.name}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="recipient-name" class="col-form-label">IP:</label>
-          <input type="text" class="form-control"></input>
-        </div>      
-    </div>
-    
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Create</button>
-    </div>
-    </form>
-  </div>
-</div>
-</div>
-
-
-
-<div class="modal fade" id="modalMigration" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">New Wan Edge Health</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form method="POST">
-      {% csrf_token %}
-    <div class="modal-body">
-      
-        <div class="form-group">
-          <input type="hidden" value="6" name="widget">
-          <label for="recipient-name" class="col-form-label">Vmanager:</label>
-          <select class="form-control" name="vm">
-            {%for vm in vms%}
-            <option value="{{vm.id}}">{{vm.name}}</option>
-            {% endfor %}
-          </select>
-        </div>
-      
-    </div>
-    
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Create</button>
-    </div>
-    </form>
-  </div>
-</div>
-</div>
-
 
 
 
@@ -564,13 +778,53 @@ aria-hidden="true">
   <!-- Bootstrap 4 -->
   <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <!-- Tempusdominus Bootstrap 4 -->
+  <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
   <script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
   <!-- AdminLTE App -->
   <script src="{% static 'dist/js/adminlte.js' %}"></script>
 
+  <!-- Tabulator -->
+  <script src="{% static 'plugins/tabulator/dist/js/tabulator.min.js' %}"></script>
+
+
   {%block scripts%} {% endblock %}
 
 
+  <script>
+
+    
+
+    //initialize table
+    var table = new Tabulator("#detailTable", {
+        height:"311px",
+        responsiveLayout:"hide",
+        layout:"fitColumns",
+
+        autoColumns:true, //create columns from data field names
+    });
+
+
+
+
+    var detailTableFilter = document.getElementById("detailTableFilter");
+
+    detailTableFilter.addEventListener("keyup", function(){
+        var filters = [];
+        var columns = table.getColumns();
+        var search = detailTableFilter.value;
+
+        columns.forEach(function(column){
+            filters.push({
+                field:column.getField(),
+                type:"like",
+                value:search,
+            });
+        });
+
+        table.setFilter([filters]);
+    });
+
+  </script>
 
 </body>
 

@@ -1,23 +1,22 @@
-<div id="{{component.id}}" class="grid-stack-item" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" 
-data-gs-width="{{component.w}}" data-gs-height="{{component.h}}"
-data-gs-min-width="3" data-gs-min-height="3">
+<div id="{{component.id}}" class="grid-stack-item" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}"
+    data-gs-width="{{component.w}}" data-gs-height="{{component.h}}" data-gs-min-width="3" data-gs-min-height="3">
     <div class="grid-stack-item-content card">
 
-        <div class="card-header {{component.vManager.color}}">
+        <div class="card-header {{component.vManager.color.color}}">
             <div class="row">
                 <div class="col">
                     <h3 class="card-title">
-                        Avg. Latency
+                        {{component.title}}: Avg. Latency
                     </h3>
                 </div>
                 <div class="col">
                     <h3 class="card-title float-right">
-                        {{component.vManager.name}}                        
+                        {{component.vManager.name}}
                     </h3>
                 </div>
                 <button class="closeB" onClick="remove({{component.id}})">X</button>
-            </div>          
-           
+            </div>
+
         </div>
 
         <div class="card-body">
@@ -25,52 +24,58 @@ data-gs-min-width="3" data-gs-min-height="3">
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Platinum (0-29ms):</div>
+
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Platinum')" class="col-10">State Platinum (0-29ms):</div>
                         <div class="col-2 text-right" id="avgLatencyPlatinumCounter{{component.id}}">10</div>
-                        
+
+
                     </div>
                     <div class="progress">
                         <div class="progress-bar bg-success progress-bar" role="progressbar" aria-valuenow="40"
-                            aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="avgLatencyPlatinumBar{{component.id}}">
+                            aria-valuemin="0" aria-valuemax="100" style="width: 0%"
+                            id="avgLatencyPlatinumBar{{component.id}}">
                         </div>
                     </div>
                 </div>
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Gold (30-99ms):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Gold')" class="col-10">State Gold (30-99ms):</div>
                         <div class="col-2 text-right" id="avgLatencyGoldCounter{{component.id}}">3</div>
-                        
+
                     </div>
                     <div class="progress">
                         <div class="progress-bar bg-teal disabled progress-bar" role="progressbar" aria-valuenow="40"
-                            aria-valuemin="0" aria-valuemax="100" id="avgLatencyGoldBar{{component.id}}" style="width: 0%">
+                            aria-valuemin="0" aria-valuemax="100" id="avgLatencyGoldBar{{component.id}}"
+                            style="width: 0%">
                         </div>
                     </div>
                 </div>
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Silver (100-199ms):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Silver')" class="col-10">State Silver (100-199ms):</div>
                         <div class="col-2 text-right" id="avgLatencySilverCounter{{component.id}}">1</div>
-                        
+
                     </div>
                     <div class="progress">
                         <div class="progress-bar bg-warning progress-bar" role="progressbar" aria-valuenow="40"
-                            aria-valuemin="0" aria-valuemax="100" id="avgLatencySilverBar{{component.id}}" style="width: 0%">
+                            aria-valuemin="0" aria-valuemax="100" id="avgLatencySilverBar{{component.id}}"
+                            style="width: 0%">
                         </div>
                     </div>
                 </div>
 
                 <div class="s25">
                     <div class="row">
-                        <div class="col-10">State Bronze (200+ms):</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('Bronze')" class="col-10">State Bronze (200+ms):</div>
                         <div class="col-2 text-right" id="avgLatencyBronzeCounter{{component.id}}">3</div>
-                        
+
                     </div>
                     <div class="progress">
                         <div class="progress-bar bg-danger progress-bar" role="progressbar" aria-valuenow="40"
-                            aria-valuemin="0" aria-valuemax="100" id="avgLatencyBronzeBar{{component.id}}" style="width: 0%">
+                            aria-valuemin="0" aria-valuemax="100" id="avgLatencyBronzeBar{{component.id}}"
+                            style="width: 0%">
                         </div>
                     </div>
                 </div>
@@ -81,14 +86,21 @@ data-gs-min-width="3" data-gs-min-height="3">
 </div>
 
 
+
+
+
+
+
 <script>
 
 
-    update{{component.id}} = function(){
+    update{{ component.id }} = function() {
 
-        fetch('/api/tunnels/{{component.vManager.id}}/1.1.1.20')
-        .then(res => res.json())
-        .then(response => {
+        
+
+        fetch('/api/tunnels/{{component.vManager.id}}/{{component.title}}')
+            .then(res => res.json())
+            .then(response => {
 
                 let total_ = response.length
                 let platinum_ = []
@@ -98,7 +110,7 @@ data-gs-min-width="3" data-gs-min-height="3">
 
 
                 response.forEach(element => {
-                    if (element.latency <= 29) {
+                    if (element.latency <= 29 && element.latency != 0) {
                         platinum_.push(element)
                     }
                     if (element.latency <= 99 && element.latency >= 30) {
@@ -110,29 +122,94 @@ data-gs-min-width="3" data-gs-min-height="3">
                     if (element.latency >= 200) {
                         bronze_.push(element)
                     }
-                })          
-            
-            
-            document.getElementById("avgLatencyPlatinumBar{{component.id}}").style.width = ((platinum_.length*100)/total_).toString()+'%';
-            document.getElementById("avgLatencyPlatinumCounter{{component.id}}").innerHTML = platinum_.length;
-                
-            document.getElementById("avgLatencyGoldBar{{component.id}}").style.width = ((gold_.length*100)/total_).toString()+'%';
-            document.getElementById("avgLatencyGoldCounter{{component.id}}").innerHTML = gold_.length;
+                })
 
-            document.getElementById("avgLatencySilverBar{{component.id}}").style.width = ((silver_.length*100)/total_).toString()+'%';
-            document.getElementById("avgLatencySilverCounter{{component.id}}").innerHTML = silver_.length;
 
-            document.getElementById("avgLatencyBronzeBar{{component.id}}").style.width = ((bronze_.length*100)/total_).toString()+'%';
-            document.getElementById("avgLatencyBronzeCounter{{component.id}}").innerHTML = bronze_.length;
+                document.getElementById("avgLatencyPlatinumBar{{component.id}}").style.width = ((platinum_.length * 100) / total_).toString() + '%';
+                document.getElementById("avgLatencyPlatinumCounter{{component.id}}").innerHTML = platinum_.length;
 
-        });
+                document.getElementById("avgLatencyGoldBar{{component.id}}").style.width = ((gold_.length * 100) / total_).toString() + '%';
+                document.getElementById("avgLatencyGoldCounter{{component.id}}").innerHTML = gold_.length;
+
+                document.getElementById("avgLatencySilverBar{{component.id}}").style.width = ((silver_.length * 100) / total_).toString() + '%';
+                document.getElementById("avgLatencySilverCounter{{component.id}}").innerHTML = silver_.length;
+
+                document.getElementById("avgLatencyBronzeBar{{component.id}}").style.width = ((bronze_.length * 100) / total_).toString() + '%';
+                document.getElementById("avgLatencyBronzeCounter{{component.id}}").innerHTML = bronze_.length;
+
+            });
     }
 
-    update{{component.id}}();
+    update{{ component.id }} ();
 
-    setInterval(update{{component.id}}, 15000);
-
-    
+    setInterval(update{{ component.id }}, 150000);
 
 
 </script>
+
+<script>
+
+    function showTable{{component.id}}(kind) { 
+        
+        table.clearData();
+
+        $('#detailTableModal').modal('toggle');
+
+        fetch('/api/tunnels/{{component.vManager.id}}/{{component.title}}')
+        .then(response => response.json())
+        .then(data => {          
+           
+
+            table.setData(data);
+
+            table.setColumns([
+                {title:"Source IP", field:"src_ip", sorter:"string"},
+                {title:"Destination IP", field:"dst_ip", sorter:"string"},
+                {title:"Name", field:"name", sorter:"string"},
+                {title:"Local color", field:"local_color", sorter:"string"},
+                {title:"Latency (ms)", field:"latency", sorter:"number"},
+
+            ]);
+
+            if(kind === "Platinum"){
+                document.getElementById('detailTableTitle').innerHTML = 'AVG. Latency State Platinum';
+                table.setFilter([
+                {field:"latency", type:">", value:0}, 
+                {field:"latency", type:"<", value:30}, 
+            ]);
+            return;
+            } else if (kind === "Gold"){
+                document.getElementById('detailTableTitle').innerHTML = 'AVG. Latency State Gold';
+                table.setFilter([
+                {field:"latency", type:">=", value:30}, 
+                {field:"latency", type:"<", value:100},
+                ]);
+            return;
+
+            } else if (kind === "Silver"){
+                document.getElementById('detailTableTitle').innerHTML = 'AVG. Latency State Silver';
+                table.setFilter([
+                {field:"latency", type:">=", value:100}, 
+                {field:"latency", type:"<", value:200},
+                ]);
+            return;
+
+            } else if (kind === "Bronze"){
+                document.getElementById('detailTableTitle').innerHTML = 'AVG. Latency State Bronze';
+                table.setFilter([
+                {field:"latency", type:">=", value:200},
+                ]);
+            return;
+
+            }
+
+        
+        });  
+    
+
+        
+    };
+
+    
+</script>
+

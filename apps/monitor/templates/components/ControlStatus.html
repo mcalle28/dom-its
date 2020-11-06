@@ -1,7 +1,7 @@
 <div id="{{component.id}}" class="grid-stack-item" data-gs-min-height="3" data-gs-min-width="2" data-gs-x="{{component.x}}" data-gs-y="{{component.y}}" data-gs-width="{{component.w}}" data-gs-height="{{component.h}}">
     <div class="grid-stack-item-content card">
 
-        <div class="card-header {{component.vManager.color}}">
+        <div class="card-header {{component.vManager.color.color}}">
             <div class="row">
                 <div class="col">
                     <h3 class="card-title">
@@ -23,7 +23,7 @@
 
                 <div class="s33">
                     <div class="row">
-                        <div class="col-10">Control Up:</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('up')" class="col-10">Control Up:</div>
                         <div class="col-2 text-right" id="controlStatusUpCounter{{component.id}}">10</div>
                         
                     </div>
@@ -36,7 +36,7 @@
 
                 <div class="s33">
                     <div class="row">
-                        <div class="col-10">Control Partial:</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('partial')" class="col-10">Control Partial:</div>
                         <div class="col-2 text-right" id="controlStatusPartialCounter{{component.id}}">3</div>
                         
                     </div>
@@ -49,7 +49,7 @@
 
                 <div class="s33">
                     <div class="row">
-                        <div class="col-10">Control Down:</div>
+                        <div style="cursor: pointer;" onclick="showTable{{component.id}}('down')" class="col-10">Control Down:</div>
                         <div class="col-2 text-right" id="controlStatusDownCounter{{component.id}}">1</div>
                         
                     </div>
@@ -68,7 +68,7 @@
 
 
     update{{component.id}} = function(){
-            fetch('/api/wanEdgeHealth/{{component.vManager.id}}')
+            fetch('/api/controlStatus/{{component.vManager.id}}')
         .then(res => res.json())
         .then(response => {
 
@@ -97,4 +97,41 @@
     
 
 
+</script>
+
+
+<script>
+
+    function showTable{{component.id}}(detail) { 
+        
+        table.clearData();
+
+        $('#detailTableModal').modal('toggle');
+
+        fetch('/api/controlStatusDetail/{{component.vManager.id}}?state='+detail)
+        .then(response => response.json())
+        .then(data => {          
+           
+            document.getElementById('detailTableTitle').innerHTML = 'Control status '+detail;
+            table.setData(data);
+
+            table.setColumns([
+                {title:"Local System IP", field:"local-system-ip", sorter:"string"},
+                {title:"Site ID", field:"site-id", sorter:"string"},
+                {title:"Type", field:"device-type", sorter:"string"},
+                {title:"Host Name", field:"host-name", sorter:"string"},
+                {title:"BFD Sessions", field:"bfdSessions", sorter:"number"},
+
+            ]);
+
+            
+
+        
+        });  
+    
+
+        
+    };
+
+    
 </script>

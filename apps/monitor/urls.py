@@ -9,5 +9,6 @@ urlpatterns = [
     path('dashboard/<id>', views.dashboard),
     path('dashboard/<id>/remove', views.remove),
     path('dashboard/<id>/move', views.move),
+    path('', views.empty),
     
 ]

@@ -17,8 +17,8 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-  <div class="login-logo">
-    <a href="a"><h1 style="font-size: 80px;" >DoM</h1></a>
+  <div class="text-center login-logo">
+    <img class="img-fluid mx-auto d-block" src="{% static 'img/SD-DOM.png'%}">
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -44,17 +44,12 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
           <!-- /.col -->
-          <div class="col-4">
+          <div class="col-8">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <div class="col-4">
+            <a href="https://aad.portal.azure.com/?bundlingKind=DefaultPartitioner&configHash=jdzJA9d1ij2E&env=aad&l=en.en-us&pageVersion=6.672.0.5911857000.201026-0053&prefetchhome=false&prewarmie=true" class="btn btn-primary btn-block">Office 365</a>
           </div>
           <!-- /.col -->
         </div>

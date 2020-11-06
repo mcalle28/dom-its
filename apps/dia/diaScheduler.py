@@ -2,16 +2,22 @@ import schedule
 from .sdwanUtils import SiteManager
 import threading
 import time
-from ..monitor.models import Webhook 
+from ..monitor.models import Webhook, WebhookLog, VManager
+import datetime
+from ..api.views import sdwan as sdwansObjs
 
 class DiaScheduler:
     
-    def __init__(self, color, queueTime, vManager):
+    def __init__(self, color, queueTime, vManager, vid, excluded=[]):
         self.waitingForDevices = False
         self.queue = []
+        self.vid = vid
         self.color = color
         self.queueTime = queueTime
         self.vManager = vManager
+        self.lastMessage = []
+        self.excluded = excluded
+
 
     '''Punto de entrada de la clase, las otras clases
     Las otras clases llaman este método, él elige si
@@ -19,18 +25,29 @@ class DiaScheduler:
     la petición, añadiéndo el json a la cola
     '''
     def processRequest(self, json):
-        print('Se procesa la peticion')
+
+        if json['values'][0]['site-id'] in self.excluded:
+            self.setMessage('Event site: '+json['values'][0]['site-id'])
+            self.setMessage('Site: '+json['values'][0]['site-id']+' is excluded')
+            self.setMessage('----------------Done----------------')
+            return
+        
         if self.color != json['values'][0]['color']:
+            
             raise Exception('Color doesn´t match')
         else:
+        
+            self.vManager = sdwansObjs.sdwans[str(self.vid)]
+            
             
             if not self.checkSchedule():
                 self.queue.append(json)
-                print('Se da la orden de crear el proceso')
                 self.waitingForDevices = True
                 self.makeSchedule()
             else:
                 self.queue.append(json)
+
+            
 
     def checkQueue(self):
         self.waitingForDevices = True
@@ -42,34 +59,36 @@ class DiaScheduler:
     
     def makeSchedule(self):
         schedule.every(self.queueTime).seconds.do(self.createConfig)
-        print('Se va a esperar: ',self.queueTime,'segundos')
 
+        self.setMessage('An event has arrive. 30 seconds timer setted to proccess request')
+        
         schedule_thread = threading.Thread(target=self.wait)
         schedule_thread.daemon = True 
 
         schedule_thread.start()
         
-
     def wait(self):      
 
         while self.waitingForDevices:
             schedule.run_pending()
             time.sleep(1)
 
-        print('La espera ha terminado')
-
     def createConfig(self):
-        
-        arrayToConfig, message = self.getFirstFromArray()
-        print('Se va a crear un proceso')
+
+        try:        
+            arrayToConfig, message = self.getFirstFromArray()
+        except:
+            return schedule.CancelJob        
 
         if message == 'A tloc went down':
+            self.setMessage('A device went down. config will be sent to vsmart from DIA to NO DIA')
             job_thread = threading.Thread(target=self.fromDiatoNoDia, args=(arrayToConfig,))
             job_thread.daemon = True
             job_thread.start()      
             self.waitingForDevices = False               
         
         if message == 'A tloc came up':
+            self.setMessage('A device came up. Config will be sent to vsmart from NO DIA to DIA')
             job_thread = threading.Thread(target=self.fromNoDiatoDia, args=(arrayToConfig,))
             job_thread.daemon = True            
             job_thread.start()
@@ -88,26 +107,48 @@ class DiaScheduler:
 
         except IndexError:
             raise Exception('No webhook')
-        
+
 
     def fromNoDiatoDia(self, array):
-
-        print('Se va a mandar algo al vmanager')
+        
 
         dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
         noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
         
+        self.setMessage('Actual NODIA State sites:')
+        self.setMessage(str([a['siteId'] for a in noDia.entries]))
+
+        self.setMessage('Actual DIA State sites:')
+        self.setMessage(str([a['siteId'] for a in dia.entries]))
+
+        sitesArray = ''
         for value in array:
 
-
-            Webhook(vManager=self.vManager,
-            ip=value['values'][0]['system-ip'],
-            message='From NoDIA to DIA',
-            hostname=value['values'][0]['host-name']).save()
-
+            sitesArray += (value['values'][0]['site-id'] + ' ')
             dia.addSite(value['values'][0]['site-id'])
             noDia.removeSite(value['values'][0]['site-id'])
-        
+
+            
+            ##Guardar en el registro de site
+            
+            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'], vManager=VManager.objects.get(id=self.vid))
+            if not created:
+                obj.inDia=True
+                obj.save()
+            else:
+                obj.siteId=value['values'][0]['site-id']
+                obj.inDia=True
+                obj.vManager = VManager.objects.get(id=self.vid)
+                obj.save()
+
+        self.setMessage('NODIA-TO-DIA Device UP: '+str(sitesArray))        
+       
+        self.setMessage('NODIA new State')
+        self.setMessage(str([a['siteId'] for a in noDia.entries]))
+
+        self.setMessage('DIA new State')
+        self.setMessage(str([a['siteId'] for a in dia.entries]))
+
         noDia.sendToVmanager()
         while noDia.isRunning():
             time.sleep(1)
@@ -118,25 +159,50 @@ class DiaScheduler:
             time.sleep(1)
             pass
 
+        self.setMessage('-'*20+'Done'+'-'*20)
         self.checkQueue()        
 
-    def fromDiatoNoDia(self, array):
-
-        print('Se va a mandar algo al vmanager')
+    def fromDiatoNoDia(self, array):    
+         
 
         dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
         noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
+
+        self.setMessage('Actual DIA State')
+        self.setMessage(str([a['siteId'] for a in dia.entries]))
+
+        self.setMessage('Actual NODIA State sites:')
+        self.setMessage(str([a['siteId'] for a in noDia.entries]))
         
+        sitesArray = ''
         for value in array:
 
-            Webhook(vManager=self.vManager,
-            ip=value['values'][0]['system-ip'],
-            message='From DIA to NoDIA',
-            hostname=value['values'][0]['host-name']).save()
-
+            sitesArray += (value['values'][0]['site-id'] + ' ')
             noDia.addSite(value['values'][0]['site-id'])
             dia.removeSite(value['values'][0]['site-id'])
+
+            ##Guardar en el registro de site
+            
+            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'], vManager=VManager.objects.get(id=self.vid))
+            if not created:
+                obj.inDia=False
+                obj.save()
+            else:
+                obj.siteId=value['values'][0]['site-id']
+                obj.inDia=True
+                obj.vManager = VManager.objects.get(id=self.vid)
+                obj.save()
+
+                
+
+        self.setMessage('DIA-TO-NODIA Device DOWN: '+str(sitesArray))
         
+        self.setMessage('DIA new State')
+        self.setMessage(self.setMessage(str([a['siteId'] for a in dia.entries])))
+
+        self.setMessage('NODIA new State')
+        self.setMessage(str([a['siteId'] for a in noDia.entries]))
+
         dia.sendToVmanager()
         while dia.isRunning():
             time.sleep(1)
@@ -147,4 +213,28 @@ class DiaScheduler:
             time.sleep(1)
             pass
         
+        self.setMessage('-'*20+'Done'+'-'*20)     
         self.checkQueue()
+
+    def getLastMessage(self):
+        res = self.lastMessage
+        self.lastMessage = []
+        return '*'.join(res)
+
+    def setMessage(self, message):
+
+        if message is None:
+            return
+        time = datetime.datetime.now()
+
+        f = open('./static/diaLogs/'+self.vManager.vmanage_ip.split('.')[0]+".log", "a+")
+        f.write('\n['+str(time)+']'+message)
+        f.close()
+
+        if len(self.lastMessage) >=10:
+            self.lastMessage = []
+
+        
+        self.lastMessage.append('['+str(time)+'] '+message)
+        
+    

@@ -35,25 +35,46 @@ class Widget(models.Model):
     def __str__(self):
         return self.name
     
+class VmColor(models.Model):
+    color = models.CharField(max_length=64)
+    def __str__(self):
+        return self.color
+
+
 class VManager(models.Model):
     name = models.CharField(max_length=64)
-    color = models.CharField(max_length=64)
+    color = models.ForeignKey('VmColor', on_delete=models.CASCADE)
     ip = models.CharField(max_length=64)
     user = models.CharField(max_length=64)
     password = models.CharField(max_length=64)
-    webhookId = models.UUIDField(default=uuid.uuid4, editable=False)
-    diaUri = models.CharField(max_length=200)
-    noDiaUri = models.CharField(max_length=200)
-
+    diaUri = models.CharField(max_length=200, blank=True, null=True)
+    noDiaUri = models.CharField(max_length=200, blank=True, null=True)
     def __str__(self):
         return self.name
 
 
 class Webhook(models.Model):
+    
+    webhookId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     vManager = models.ForeignKey("VManager", on_delete=models.CASCADE)
-    ip = models.CharField(max_length=200)
-    message = models.CharField(max_length=200)
-    hostname = models.CharField(max_length=200)
+
+class WebhookLog(models.Model):
     time = models.DateTimeField(auto_now_add=True)
+    siteId = models.CharField(max_length=200)
+    inDia = models.BooleanField(default=True)
+    vManager = models.ForeignKey('VManager', on_delete=models.CASCADE)
+
+
     
 
+class Group(models.Model):
+    name = models.CharField(max_length=200)
+    users = models.ManyToManyField('User', related_name='userGp')
+    vManagers = models.ManyToManyField('VManager', related_name='vmGp')
+
+    def __str__(self):
+        return self.name
+
+class ExcludeSite(models.Model):
+    webhook = models.ForeignKey('Webhook', on_delete=models.CASCADE)
+    siteId = models.CharField(max_length=200)

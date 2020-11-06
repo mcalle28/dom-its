@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 from django.utils import timezone
 import sys
+from intspan import intspan
+import time
 
 class SiteManager:
 
@@ -29,6 +31,8 @@ class SiteManager:
         url = self.base_url_str+url
             
         response = self.session.get(url, verify=False)
+        
+
 
         return response.json()
 
@@ -52,9 +56,9 @@ class SiteManager:
             responsetask = self.session.get(urltask, verify=False)
  
         
-        print(self.site)
+        
         response = self.session.put(url, data=json.dumps(self.site), verify=False)
-        print(response.json())
+        
         masterTemplate = response.json()['masterTemplatesAffected'][0]
 
         print('%s Put para cambiar Site List de %s' %(str(datetime.now()),self.id))
@@ -110,234 +114,113 @@ class SiteManager:
         self.entries = self.SdRange.data
         self.site['entries'] = self.entries
 
+
 class SdRange:
     
-    def __init__(self, data):
+    def __init__(self, data):        
+        self.data = data
+        self.ranges = []
+        self.to_ranges()        
         
-        self.data = ''
+        
         if type(data) == list:            
             self.data = data
-            self.sort()
         else:
             raise BaseException('Formato invalido')
-          
-    def sort(self):
-        self.data = sorted(self.data, key=lambda k: k.get('siteId', 0), reverse=False)
-    
-    def contains(self, value):
-        for obj in self.data:
             
-            values = obj['siteId'].split('-')
-            values = [ int(x) for x in values ]
-
-            if len(values) == 1:
-                if values[0] == value:
-                    return True
-                
+            
+    def to_ranges(self):    
+        
+        for item in self.data:
+            if '-' in item['siteId']:
+                values = item['siteId'].split('-')
+                self.ranges.append([int(values[0]), int(values[1])])
             else:
-                if value >= values[0] and value <= values[1]:
-                    return True
-                
-        return False
-    
-    def add(self, value):
-        if self.contains(value):
-            return
+                self.ranges.append([int(item['siteId']),int(item['siteId'])])
+
         
-        newData=[]
-        added = False
-        joined = False
-        
-        for i in range(len(self.data)):
-            values = self.data[i]['siteId'].split('-')
-            values = [ int(x) for x in values ]
             
-            if joined:
-                joined = False
-                continue
-                 
-            if len(values) == 1:
-                if values[0]-value == 1:
-                    nObj = self.data[i]
-                    nObj['siteId'] = str(value)+'-'+str(values[0])
-                    newData.append(nObj)
-                    added = True
-                    
-                elif value-values[0] == 1:
-                    nObj = self.data[i]
-                    nObj['siteId'] = str(values[0])+'-'+str(value)
-                    newData.append(nObj)
-                    added = True
-                    
-                else:
-                    newData.append(self.data[i])
-
-            else: 
-                if values[0] - value == 1:
-                    nObj = self.data[i]
-                    nObj['siteId'] = str(values[0]-1)+'-'+str(values[1])
-                    newData.append(nObj)
-                    added = True
-                    
-                elif values[1] - value == -1:
-                    
-                    try:
-                        second = self.data[i+1]['siteId'].split('-')                        
-                        second = [ int(x) for x in second ]
-
-                        if value - second[0] == -1:
-                            nObj = self.data[i]
-                            nObj['siteId'] = str(values[0])+'-'+str(second[1])
-
-                            added= True
-                            joined = True
-                            newData.append(nObj)
-                            continue
-                    except Exception as e:
-                        print(str(e))
-                            
-                            
-                    nObj = self.data[i]
-                    nObj['siteId'] = str(values[0])+'-'+str(values[1]+1)
-                    newData.append(nObj)
-                    added = True
-                    
-                elif value > values[1]:
-                    newData.append(self.data[i])
-                    
-                elif value < values[1]:
-                    if added:
-                        newData.append(self.data[i])
-                        added = True
-                        continue
-                    added = True
-                    newData.append({'siteId':str(value)})
-                    newData.append(self.data[i])
-                
-                
-        if not added:
-            newData.append({'siteId':str(value)})
-                        
-        self.data = newData
+    def remove(self, rem):
         
-    def remove(self, value):
-        if not self.contains(value):
-            return
-        
-        newRange = []
-        removed = False
-        
-        for obj in self.data:
-            values = obj['siteId'].split('-')
-            values = [ int(x) for x in values ]
-            
-            if len(values) == 1:
-                
-                if value == values[0]:
-                    continue
-                else:
-                    newRange.append({'siteId':str(values[0])})
-                    
-                
-            else:
-                if value >= values[0] and value <= values[1]:
-                    
-                    if value == values[0]:
-                        nObj = obj                        
-                        nObj['siteId'] = str(values[0]+1)+'-'+str(values[1])
-                        newRange.append(nObj)
-
-                    elif value == values[1]:
-                        nObj = obj
-                        
-
-                        nObj['siteId'] = str(values[0])+'-'+str(values[1]-1)
-                        newRange.append(nObj)
-                        
+        for i, r in enumerate(self.ranges):
+            if r[0] <= rem <= r[1]:
+                if r[0] == rem:     # range min
+                    if r[1] > rem:
+                        r[0] += 1
                     else:
-                        if values[1] - values[0] == 1:
-                            if values[0] == value:
-                                newRange.append({'siteId':str(value[1])})
-                            if values[1] == value:
-                                newRange.append({'siteId':str(value[0])}) 
-                        else:
-                            newRange.append({'siteId':str(values[0])+'-'+str(value-1)})
-                            newRange.append({'siteId':str(value+1)+'-'+str(values[1])})
-                    
-                else:                    
-                    newRange.append(obj)
-                    
-        self.data = newRange
-        self.removeDoubles()
+                        del self.ranges[i]
+                        self.fixRange()
+                elif r[1] == rem:   # range max
+                    if r[0] < rem:
+                        r[1] -= 1
+                    else:
+                        del self.ranges[i]
+                        self.fixRange()
+                else:               # inside, range extremes.
+                    r[1], splitrange = rem - 1, [rem + 1, r[1]]
+                    self.ranges.insert(i + 1, splitrange)
+                    self.fixRange()                    
+                self.fixRange()
+                break
+            if r[0] > rem:  # Not in sorted list
+                self.fixRange()
+                break
+        
+    def add(self, add):
+        
+        for i, r in enumerate(self.ranges):
+            if r[0] <= add <= r[1]:     # already included
+                break
+            elif r[0] - 1 == add:      # rough extend to here
+                r[0] = add
+                break
+            elif r[1] + 1 == add:      # rough extend to here
+                r[1] = add
+                break
+            elif r[0] > add:      # rough insert here
+                self.ranges.insert(i, [add, add])
+                break
+        else:
+            self.ranges.append([add, add])
+            self.fixRange()
+        self.fixRange()
+    
+    
+    def consolidate(self):
+        "Combine overlapping ranges"
+        for this, that in zip(self.ranges, self.ranges[1:]):
+            
+         
+            if this[1] + 1 >= that[0]:  # Ranges interract
+                if this[1] >= that[1]:  # this covers that
+                    this[:], that[:] = [], this
+                else:   # that extends this
+                    this[:], that[:] = [], [this[0], that[1]]
+        self.ranges[:] = [r for r in self.ranges if r]
+        
+
+
+    def fixRange(self):
+        self.ranges.sort()
+        self.consolidate()        
+        self.formatData()
+        pass
 
     def removeDoubles(self):
-
-        newRange = []
-
-        for obj in self.data:
-            values = obj['siteId'].split('-')
-            values = [ int(x) for x in values ]
-            
-            if len(values) == 1 or values[0] == values[1]:
-                newRange.append({'siteId':str(values[0])})
-                continue
-
-           
-            newRange.append(obj)    
-        self.data = newRange
-
-    def getData(self):
-        self.removeDoubles()
-        self.sort()
-        return self.data
-
-class VManager:
-
-    def __init__(self, vmanage_ip, username, password):
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-        self.vmanage_ip = vmanage_ip
-        self.session = {}
-        self.base_url_str = 'https://%s:443'%vmanage_ip
-        self.login(self.vmanage_ip, username, password)
-
-
-    def login(self, vmanage_ip, username, password):        
-        base_url_str = self.base_url_str
-        login_action = '/j_security_check'        
-        login_data = {'j_username' : username, 'j_password' : password}        
-        login_url = base_url_str + login_action        
-
-        sess = requests.session()
-        login_response = sess.post(url=login_url, data=login_data, verify=False)
-
+        res = []
+        for i,item in enumerate(self.ranges):
+            if item[1] == item[0]:
+                res.insert(i,[item[0]])
+            else:
+                res.insert(i,item)
+                
+        return res
+        
     
-        if b'<html>' in login_response.content:
-            print ("Login Failed")         
 
-        base_url_str = self.base_url_str
-        url = base_url_str+'/dataservice/client/token'
-        response = sess.get(url, verify=False)
-        print("EXITO-"*17)
-        print(response.text)
-        print("EXITO-"*17)
-        sess.headers['X-XSRF-TOKEN'] = response.text
-        self.session = sess
-
-    def getSiteId(self, ip):
-        url = '/dataservice/system/device/vedges?deviceIP='+ip
-        url = self.base_url_str+url
-        payload = {}
-        headers = {}
-        response = self.session.get(url, headers=headers, data=payload, verify=False)
-
-        return response.json()['data'][0]['site-id']
-
-    def getDevice(self, ip):
-
-        url = '/dataservice/system/device/vedges?deviceIP='+ip
-        url = self.base_url_str+url
-        payload = {}
-        headers = {}
-        response = self.session.get(url, headers=headers, data=payload, verify=False)
-        return response.json()['data'][0]
+    def formatData(self):
+        ran = self.removeDoubles()
+        res = []
+        for item in ran:
+            res.append({'siteId':'-'.join(str(n) for n in item)})  
+        self.data = res

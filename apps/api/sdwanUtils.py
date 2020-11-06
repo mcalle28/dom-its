@@ -56,26 +56,36 @@ class sdwan:
         response = self.session.get(url, verify=False)
         return response.json()['data'][0]
 
+
+    def controlStatusDetail(self, detail):        
+        url = '/dataservice/device/control/networksummary?state='+detail
+        url = self.base_url_str+url
+        response = self.session.get(url, verify=False)
+        return response.json()['data']
+    
+
     def generalState(self):
         url = '/dataservice/network/connectionssummary'
         url = self.base_url_str+url
         response = self.session.get(url, verify=False)
+
         return response.json()['data']
 
 
-    def summary(self):
-        urls = [{'title':'hardwareHealth','url':'/dataservice/device/hardwarehealth/summary'}, 
-                {'title':'deviceControl','url':'/dataservice/device/control/count'}, 
-                {'title':'network','url':'/dataservice/network/connectionssummary'},
-                {'title':'reboot','url':'/dataservice/network/issues/rebootcount'},
-                {'title':'cert','url':'/dataservice/certificate/stats/summary'}]
-        
-        res = {}
-        for resource in urls:            
-            url = self.base_url_str+resource['url']
-            res[resource['title']] = (self.session.get(url, verify=False).json())
 
-        return res
+    def certificate(self):        
+        url = '/dataservice/certificate/stats/summary'
+        url = self.base_url_str+url 
+        response = self.session.get(url, verify=False)
+        return response.json()['data'][0]
+
+
+    def reboot(self):        
+        url = '/dataservice/network/issues/rebootcount'
+        url = self.base_url_str+url 
+        response = self.session.get(url, verify=False)
+        return response.json()['data'][0]
+
   
     def tunnels(self, ip):
         url = '/dataservice/statistics/approute/fec/aggregation'
@@ -97,6 +107,7 @@ class sdwan:
         return response.json()['data']
 
 
+
     def health(self, personality):
         url = '/dataservice/device/hardwarehealth/detail?state='+personality
         url = self.base_url_str+url 
@@ -112,3 +123,5 @@ class sdwan:
         url = self.base_url_str+url
         response = self.session.get(url, verify=False)
         return response.json()['data']
+
+

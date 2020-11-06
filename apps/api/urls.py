@@ -6,10 +6,14 @@ urlpatterns = [
 
     path('wanEdgeHealth/<id>',views.wanEdgeHealth),
     path('controlStatus/<id>',views.controlStatus),
+    path('controlStatusDetail/<id>',views.controlStatusDetail),
     path('generalState/<id>',views.generalState),
     path('tunnels/<id>/<ip>', views.tunnels),
+    path('reachable/<id>',views.reachable),
+    path('wanEdgeHealthDetail/<id>',views.wanEdgeHealthDetail),
+    path('certificate/<id>', views.certificate),
+    path('reboot/<id>', views.reboot),
 
-    path('reachable/<personality>',views.reachable),
     path('network/<personality>', views.network),
     path('health/<personality>', views.health),
     

@@ -1,25 +1,42 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import StreamingHttpResponse, JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from .diaScheduler import DiaScheduler
-from ..monitor.models import VManager as dbVm
-from ..monitor.models import Webhook
-from ..api.sdwanUtils import sdwan as VManager
+from ..monitor.models import Webhook as webhookDb
+from ..monitor.models import WebhookLog, VManager, ExcludeSite
+from ..api.sdwanUtils import sdwan as sdwan
 import json
+import time
+import datetime
+from django.conf import settings as djangoSettings
+from ..api.views import sdwan as sdwansObjs
 
 
 def initSchedulers():
     schedulers = {}
-    for v in dbVm.objects.all():
-        schedulers[str(v.webhookId).replace('-','')] = DiaScheduler('biz-internet', 30, VManager(v.ip,v.user,v.password) )
+    for v in webhookDb.objects.all():        
+        
+        excluded = ExcludeSite.objects.filter(webhook=v.webhookId).values('siteId')
+
+        excluded = [a['siteId'] for a in excluded]
+
+        schedulers[str(v.webhookId).replace('-','')] = DiaScheduler('biz-internet', 30, sdwansObjs.sdwans[str(v.vManager.id)], str(v.vManager.id), excluded=excluded)
     
     return schedulers
 
 schedulers = initSchedulers()
 
 
-def config(request):    
-    return render(request, 'diaConfig.html')
+def config(request):
+
+    if request.method == 'POST':
+        vm = request.POST.get('vm')
+        webhookDb(vManager = VManager.objects.get(id=vm)).save()
+
+    wh = webhookDb.objects.all()    
+    vms = VManager.objects.filter(webhook=None)
+    
+    return render(request, 'diaConfig.html', context={'webhooks':wh,'vms':vms})
 
 @csrf_exempt
 def webhook(request, webhookId):
@@ -34,12 +51,13 @@ def webhook(request, webhookId):
 
 def configId(request,id):
 
-    vm = dbVm.objects.get(id=id)
-    wh = Webhook.objects.filter(vManager=vm)
-    return render(request, 'diaConfigDetail.html', context={'vm':vm,'wh':wh})
+    wh = webhookDb.objects.get(webhookId=id)
+    es = ExcludeSite.objects.filter(webhook=wh)
+    
+    return render(request, 'diaConfigDetail.html', context={'wh':wh,'excluded':es})
 
 def DIAtoNoDIA(request):
-    vm = request.POST.get('vm','-1').replace('-','')
+    vm = request.POST.get('wh','-1').replace('-','')
     siteId = request.POST.get('siteId','-1') 
 
     data ={
@@ -63,11 +81,11 @@ def DIAtoNoDIA(request):
     }   
 
     schedulers[vm].processRequest(data)
-    return HttpResponse('200')
+    return  redirect('configDiaDetail', id=vm)
 
 
 def NoDIAtoDIA(request):
-    vm = request.POST.get('vm','-1').replace('-','')
+    vm = request.POST.get('wh','-1').replace('-','')
     siteId = request.POST.get('siteId','-1')  
 
     data ={
@@ -90,4 +108,49 @@ def NoDIAtoDIA(request):
     }    
 
     schedulers[vm].processRequest(data)
-    return HttpResponse('200')
+    return  redirect('configDiaDetail', id=vm)
+
+def stream(request,id):
+    def event_stream():
+
+        while True:
+            res = 'data:'+ schedulers[id.replace('-','')].getLastMessage()+ '\n\n'
+            time.sleep(3)
+            yield (res)
+            
+    return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
+
+
+def downloadLog(request,id):
+
+    filename = webhookDb.objects.get(webhookId=id).vManager.ip.split('.')[0]
+
+    file_location = djangoSettings.STATICFILES_DIRS[0]+'/diaLogs/'+filename+'.log'
+    with open(file_location, 'r') as f:
+        file_data = f.read()
+        # sending response 
+        response = HttpResponse(file_data, content_type='text/log')
+        response['Content-Disposition'] = 'attachment; filename="register.log"'
+
+    return response
+
+
+def excludeSites(request,id):
+    if request.method == 'POST':
+        oper = request.POST.get('oper','-1')
+        siteId = request.POST.get('siteId','-1')
+
+        wh = webhookDb.objects.get(webhookId=id)
+
+        if oper == 'add':
+           obj, created = ExcludeSite.objects.get_or_create(webhook=wh,siteId=siteId)
+           obj.save()
+
+        elif oper == 'delete':
+            obj, created = ExcludeSite.objects.get_or_create(webhook=wh,siteId=siteId)
+            obj.delete()
+        else:
+            print('NO NO NO NO '*50)
+
+        return redirect('configDiaDetail', id=id)
+

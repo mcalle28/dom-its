@@ -35,9 +35,7 @@
                             </div>
                             <div class="col">
                                 <h3 class="card-title float-right">
-                                    <a class="btn text-white btn-primary">
-                                      Add new
-                                    </a>                       
+                                  <a data-toggle="modal" data-target="#addNew" href="#" class="btn btn-primary"> Add new </a>       
                                 </h3>
                             </div>
                           
@@ -55,13 +53,15 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>13</td>
-                                <td>ITS test</td>
-                                <td>vmanage-930412.viptela.net</td>
-                                <td>http://dom-its.com/dia/webhook/FEW097ASWFG7865BMH89N89896</td>
-                                <td><span class="badge bg-success"><a href="1">ON</a></span></td>
+                              {% for webhook in webhooks %}
+                              <tr>                                
+                                <td>{{webhook.vManager.id}}</td>
+                                <td>{{webhook.vManager.name}}</td>
+                                <td>{{webhook.vManager.ip}}</td>
+                                <td>{{ request.META.HTTP_HOST }}/dia/webhook/{{webhook.webhookId}}</td>
+                                <td><span class="badge bg-success"><a href="{{webhook.webhookId}}">ON</a></span></td>
                               </tr>
+                              {% endfor%}
                               
                             </tbody>
                           </table>                     
@@ -76,6 +76,40 @@
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
+
+<div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Webhook</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            
+            <div class="form-group">
+              <label class="col-form-label">VManager (Ones which left for DIA):</label>
+              <select class="form-control" name="vm">
+                {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
 {%endblock%}
