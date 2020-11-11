@@ -28,6 +28,9 @@ class Sdwan:
 
     def controlStatus(self, vmid):
         return self.sdwans[vmid].controlStatus()
+        
+    def controlStatusDetail(self, vmid, detail):        
+        return self.sdwans[vmid].controlStatusDetail(detail)
 
     def generalState(self, vmid):
         return self.sdwans[vmid].generalState()
