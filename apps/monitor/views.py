@@ -24,8 +24,7 @@ def login(request):
 
             request.session['vms'] = json.loads(serializers.serialize("json", userVms))
 
-            print(type(request.session['vms']),len(request.session['vms']))
-           
+
 
             return redirect('/dashboard')
         else:            

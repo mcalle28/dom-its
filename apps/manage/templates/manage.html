@@ -38,7 +38,7 @@
                             </div>
                             <div class="col">
                                 <h3 class="card-title float-right">
-                                  <a data-toggle="modal" data-target="#addNew" href="#" class="btn btn-primary"> Add new </a>       
+                                  <a data-toggle="modal" data-target="#addVm" href="#" class="btn btn-primary"> Add new </a>       
                                 </h3>
                             </div>
                           
@@ -48,6 +48,7 @@
                           <table id="vManagersTable" class="table table-bordered">
                             <thead>
                               <tr>
+                                <th>id</th>
                                 <th>Name</th>
                                 <th>ip</th>
                                 <th>user</th>
@@ -57,7 +58,8 @@
                             </thead>
                             <tbody>
                               {% for vm in vms %}
-                              <tr>                                
+                              <tr>
+                                <td>{{vm.id}}</td>                                
                                 <td>{{vm.name}}</td>
                                 <td>{{vm.ip}}</td>
                                 <td>{{vm.user}}</td>  
@@ -88,7 +90,7 @@
                             </div>
                             <div class="col">
                                 <h3 class="card-title float-right">
-                                  <a data-toggle="modal" data-target="#addNew" href="#" class="btn btn-primary"> Add new </a>       
+                                  <a data-toggle="modal" data-target="#addUser" href="#" class="btn btn-primary"> Add new </a>       
                                 </h3>
                             </div>
                           
@@ -98,18 +100,20 @@
                           <table id="usersTable" class="table table-bordered">
                             <thead>
                               <tr>
+                                <th>id</th>
                                 <th>Name</th>
                                 <th>Is Admin</th>
-                                <th>Options</th>
+                                
                                
                               </tr>
                             </thead>
                             <tbody>
                               {% for user in users %}
-                              <tr>                                
+                              <tr>
+                                <td>{{user.id}}</td>                                  
                                 <td>{{user.userName}}</td>
                                 <td>{{user.isAdmin}}</td>
-                                <td>Options</td>  
+                                 
                               </tr>
                               {% endfor%}
                               
@@ -145,6 +149,7 @@
                           <table id="groupsTable" class="table table-bordered">
                             <thead>
                               <tr>
+                                <th>id</th>
                                 <th>Name</th>
                                 <th>Users</th>
                                 <th>Vmanagers</th>
@@ -153,10 +158,11 @@
                             </thead>
                             <tbody>
                               {% for gp in gps %}
-                              <tr>                                
+                              <tr>     
+                                <td>{{gp.id}}</td>                             
                                 <td>{{gp.name}}</td>
-                                <td>{{gp.users | length}}</td>
-                                <td>{{gp.vManagers | length}}</td>  
+                                <td>{{gp.users.all | length}}</td>
+                                <td>{{gp.vManagers.all | length}}</td>  
                               </tr>
                               {% endfor%}
                               
@@ -184,13 +190,13 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="POST">
+        <form method="POST" action="cGroup">
           {% csrf_token %}
           <div class="modal-body">
             
             <div class="form-group">
               <label class="col-form-label">Name</label>
-              <input class="form-control" placeholder="Group name" />
+              <input name="name" required class="form-control" placeholder="Group name" />
             </div>
 
           </div>
@@ -203,6 +209,114 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+
+  <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New DOM User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="cUser">
+          {% csrf_token %}
+          <div class="modal-body">
+            
+            <div class="form-group">
+              <label class="col-form-label">Email</label>
+              <input name="email" type="email" required class="form-control" placeholder="User email" />
+
+              <label class="col-form-label">Password</label>
+              <input name="password" type="password" required class="form-control" placeholder="User password" />
+
+              <label class="col-form-label">Admin</label>
+              <input type="checkbox" name="admin" class="" />
+
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal fade" id="addVm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New DOM VManager</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" action="cVmanager">
+        {% csrf_token %}
+        <div class="modal-body">
+          
+          <div class="form-group">
+            <label class="col-form-label">Name</label>
+            <input name="name" type="text" required class="form-control" placeholder="VManager name" />
+
+            <label class="col-form-label">IP</label>
+            <input name="ip" type="text" required class="form-control" placeholder="VManager IP (ex. vmanage-930412.viptela.net)" />
+            
+
+            <label class="col-form-label">User</label>
+            <input name="user" type="text" required class="form-control" placeholder="VManager admin user" />
+
+
+            <label class="col-form-label">Password</label>
+            <input name="password" type="password" required class="form-control" placeholder="VManager admin password" />
+
+            <label class="col-form-label">Color</label>
+            <select name="color" class="form-control">
+              {%for color in colors%}
+                <option value="{{color.id}}" class="{{color.color}}">{{color.color}}</option>
+              {% endfor %}
+            </select>
+
+            <label class="col-form-label">DIA Uri (optional)</label>
+            <input name="dia" type="text"  class="form-control" placeholder="VManager DIA uri" />
+
+            <label class="col-form-label">NODIA Uri (optional)</label>
+            <input name="noDia" type="text"  class="form-control" placeholder="VManager NODIA uri" />
+
+
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
 
   {%load static%}
    <!-- Tabulator -->
@@ -222,6 +336,10 @@
         responsiveLayout:"hide",
         layout:"fitColumns",
 
+        rowClick:function(e, row){
+          window.location.href = 'user/'+row.getData().id
+        },
+
         
     });
 
@@ -231,6 +349,9 @@
         responsiveLayout:"hide",
         layout:"fitColumns",
 
+        rowClick:function(e, row){
+          window.location.href = 'vManager/'+row.getData().id
+        },
         
     });
 
@@ -239,6 +360,10 @@
         height:"311px",
         responsiveLayout:"hide",
         layout:"fitColumns",
+
+        rowClick:function(e, row){
+          window.location.href = 'group/'+row.getData().id
+        },
 
         
     });

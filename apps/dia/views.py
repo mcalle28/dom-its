@@ -65,7 +65,7 @@ def DIAtoNoDIA(request):
         {
         "color": "biz-internet",
         "system-ip": "0.0.0.0",
-        "host-name": "...",
+        "host-name": "DOM generated",
         "site-id": siteId
         }
     ],
@@ -93,7 +93,7 @@ def NoDIAtoDIA(request):
         {
         "color": "biz-internet",
         "system-ip": "0.0.0.0",
-        "host-name": "...",
+        "host-name": "DOM generated",
         "site-id": siteId
         }
     ],

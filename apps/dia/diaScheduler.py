@@ -33,8 +33,7 @@ class DiaScheduler:
             return
         
         if self.color != json['values'][0]['color']:
-            
-            raise Exception('Color doesn´t match')
+            raise Exception('Color doesnÂ´t match')
         else:
         
             self.vManager = sdwansObjs.sdwans[str(self.vid)]
@@ -131,12 +130,12 @@ class DiaScheduler:
             
             ##Guardar en el registro de site
             
-            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'], vManager=VManager.objects.get(id=self.vid))
+            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
             if not created:
                 obj.inDia=True
                 obj.save()
             else:
-                obj.siteId=value['values'][0]['site-id']
+                obj.siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name']
                 obj.inDia=True
                 obj.vManager = VManager.objects.get(id=self.vid)
                 obj.save()
@@ -183,12 +182,12 @@ class DiaScheduler:
 
             ##Guardar en el registro de site
             
-            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'], vManager=VManager.objects.get(id=self.vid))
+            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id']+ ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
             if not created:
                 obj.inDia=False
                 obj.save()
             else:
-                obj.siteId=value['values'][0]['site-id']
+                obj.siteId=value['values'][0]['site-id'] +' HostName: '+ value['values'][0]['host-name']
                 obj.inDia=True
                 obj.vManager = VManager.objects.get(id=self.vid)
                 obj.save()
@@ -236,5 +235,3 @@ class DiaScheduler:
 
         
         self.lastMessage.append('['+str(time)+'] '+message)
-        
-    

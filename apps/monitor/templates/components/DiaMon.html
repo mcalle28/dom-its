@@ -67,7 +67,7 @@ data-gs-min-width="3" data-gs-min-height="3">
             response.forEach(element => {
                 
                 var opt = document.createElement('option');
-                opt.innerHTML = 'SiteId: '+element+' HostName: XXXXX';
+                opt.innerHTML = 'SiteId: '+element;
                 select.appendChild(opt);
                 
             });         
@@ -76,7 +76,7 @@ data-gs-min-width="3" data-gs-min-height="3">
 
     update{{component.id}}();
 
-    //setInterval(update{{component.id}}, 15000);
+     setInterval(update{{component.id}}, 15000);
 
     
 
