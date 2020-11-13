@@ -25,8 +25,8 @@ SECRET_KEY = '+3dd@5vgb$g6-5bc82m^(4tlj0gl_8fjtwt($#ey$^^6s45m_4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['*','https://domtenant1.itsinfocom.com/login/','domtenant1.itsinfocom.com','itsinfocom.com','htps://itsinfocom.com','http://172.29.25.27/','https://172.29.25.27/','172.29.25.27']
+CSRF_TRUSTED_ORIGINS = ['domtenant1.itsinfocom.com']
 
 # Application definition
 
