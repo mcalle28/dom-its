@@ -157,11 +157,17 @@
 <script>
 
     $('#users').multipleSelect({
-        filter: true
+        filter: true,
+        onClick: function(){
+            $('#updateBtn').fadeIn();
+        }
     })
 
     $('#vms').multipleSelect({
-        filter: true
+        filter: true,
+        onClick: function(){
+            $('#updateBtn').fadeIn();
+        }
     })
 
 

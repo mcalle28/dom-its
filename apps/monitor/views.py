@@ -17,8 +17,8 @@ def login(request):
             userObj = User.objects.get( userName=request.POST.get('user'), password=request.POST.get('password'))
 
             request.session['user'] = userObj.id
-
-            userVms= list(VManager.objects.filter(vmGp__in=Group.objects.filter(users=userObj)))
+            request.session['admin'] = userObj.isAdmin
+            userVms= list(VManager.objects.filter(vmGp__in=Group.objects.filter(users=userObj)).distinct())
 
            
 
@@ -42,7 +42,7 @@ def index(request):
     userDashboards = Dashboard.objects.filter(user = request.session['user']).first()
     
     if userDashboards is None:
-        obj = Dashboard(user=User.objects.get(id = request.session['user']), name='initial')
+        obj = Dashboard(user=User.objects.get(id = request.session['user']), name='default')
         obj.save()
         return redirect('/dashboard/'+str(obj.id))
 
@@ -87,3 +87,13 @@ def move(request, id):
         c.save()
 
     return HttpResponse(status=200)
+
+def logout(request):
+    request.session.flush()
+    return redirect('login')
+
+def deleteDb(request):
+    dbId = request.POST.get('dbId')
+    Dashboard.objects.get(id=dbId).delete()
+
+    return redirect('/dashboard')

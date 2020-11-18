@@ -60,9 +60,9 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
+      {%load static%}
       <a href="/dashboard" class="brand-link">
-        <i class="fa fa-cog"></i>DOM
-        <span class="brand-text font-weight-light">- ITS</span>
+        <img class="img-fluid mx-auto d-block" src="{% static 'img/SD-DOM-W.png'%}">
       </a>
 
       <!-- Sidebar -->
@@ -70,24 +70,17 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-
           </div>
+
+          {% if request.session.admin == True %}
           <div class="info">
             <a href="/manage" class="d-block">Admin</a>
           </div>
+          {% endif %}
         </div>
 
         <!-- SidebarSearch Form -->
-        <div class="form-inline">
-          <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-              <button class="btn btn-sidebar">
-                <i class="fas fa-search fa-fw"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+        
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -277,7 +270,7 @@
               </li>
 
               <li class="nav-item">
-                <a data-toggle="modal" data-target="#modalAddDb" href="#" class="nav-link">
+                <a data-toggle="modal" data-target="#modalDeleteDb" href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Delete</p>
                 </a>
@@ -285,7 +278,17 @@
             </ul>
           </li>
 
+          
+          <li class="nav-header">LogOut</li>
 
+          <li class="nav-item ">
+            <a href="/logout" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>
+                LogOut                
+              </p>
+            </a>     
+          </li>
 
 
           </ul>
@@ -751,11 +754,43 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
 
 
+  <div class="modal fade" id="modalDeleteDb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete dashboard</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" action="/deleteDb/">
+        {% csrf_token %}
+        <div class="modal-body">
+          
+          <div class="form-group">
+            <label class="col-form-label">Are you sure?</label>
+            <input name="dbId" class="form-control" value="{{request.path|slice:'11:'}}" type="hidden">
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
     <footer class="main-footer">
       <strong>DOM by ITS INFOCOM</strong>
 
       <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 0.1.1a-pre
+        <b>Version</b> 1.00
       </div>
     </footer>
 
