@@ -2,7 +2,7 @@ import schedule
 from .sdwanUtils import SiteManager
 import threading
 import time
-from ..monitor.models import Webhook 
+from ..monitor.models import Webhook, WebhookLog, VManager
 import datetime
 from ..api.views import sdwan as sdwansObjs
 
@@ -150,6 +150,17 @@ class DiaScheduler:
             dia.addSite(value['values'][0]['site-id'])
             noDia.removeSite(value['values'][0]['site-id'])
 
+            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
+            if not created:
+                obj.inDia=True
+                obj.save()
+            else:
+                obj.siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name']
+                obj.inDia=True
+                obj.vManager = VManager.objects.get(id=self.vid)
+                obj.save()
+
+
 
         self.setMessage('NODIA-TO-DIA Device UP: '+str(sitesArray))        
         
@@ -192,6 +203,16 @@ class DiaScheduler:
             sitesArray += (value['values'][0]['site-id'] + ' ')
             noDia.addSite(value['values'][0]['site-id'])
             dia.removeSite(value['values'][0]['site-id'])
+
+            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id']+ ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
+            if not created:
+                obj.inDia=False
+                obj.save()
+            else:
+                obj.siteId=value['values'][0]['site-id'] +' HostName: '+ value['values'][0]['host-name']
+                obj.inDia=True
+                obj.vManager = VManager.objects.get(id=self.vid)
+                obj.save()
 
 
         self.setMessage('DIA-TO-NODIA Device DOWN: '+str(sitesArray))
