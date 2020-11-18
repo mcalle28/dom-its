@@ -121,6 +121,8 @@ def get(request):
 def webhook(request, id):
 
     vm = VManager.objects.get(id=id)
-    wh = WebhookLog.objects.filter(vManager=vm, inDia=False).values_list('siteId',flat=True)
+    wh = [] 
+    for w in WebhookLog.objects.filter(vManager=vm, inDia=False):
+        wh.append('['+str(w.time)+'] '+'SiteId: '+w.siteId)
     
     return JsonResponse(list(wh), safe=False)
