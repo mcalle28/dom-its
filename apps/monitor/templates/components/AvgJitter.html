@@ -110,16 +110,16 @@
 
 
                 response.forEach(element => {
-                    if (element.latency <= 29 ) {
+                    if (element.jitter <= 29 ) {
                         platinum_.push(element)
                     }
-                    if (element.latency <= 99 && element.latency >= 30) {
+                    if (element.jitter <= 99 && element.jitter >= 30) {
                         gold_.push(element)
                     }
-                    if (element.latency <= 199 && element.latency >= 100) {
+                    if (element.jitter <= 199 && element.jitter >= 100) {
                         silver_.push(element)
                     }
-                    if (element.latency >= 200) {
+                    if (element.jitter >= 200) {
                         bronze_.push(element)
                     }
                 })
@@ -175,30 +175,30 @@
             if(kind === "Platinum"){
                 document.getElementById('detailTableTitle').innerHTML = 'AVG. Jitter State Platinum';
                 table.setFilter([
-                {field:"latency", type:">", value:0}, 
-                {field:"latency", type:"<", value:30}, 
+                {field:"jitter", type:">", value:0}, 
+                {field:"jitter", type:"<", value:30}, 
             ]);
             return;
             } else if (kind === "Gold"){
                 document.getElementById('detailTableTitle').innerHTML = 'AVG. Jitter State Gold';
                 table.setFilter([
-                {field:"latency", type:">=", value:30}, 
-                {field:"latency", type:"<", value:100},
+                {field:"jitter", type:">=", value:30}, 
+                {field:"jitter", type:"<", value:100},
                 ]);
             return;
 
             } else if (kind === "Silver"){
                 document.getElementById('detailTableTitle').innerHTML = 'AVG. Jitter State Silver';
                 table.setFilter([
-                {field:"latency", type:">=", value:100}, 
-                {field:"latency", type:"<", value:200},
+                {field:"jitter", type:">=", value:100}, 
+                {field:"jitter", type:"<", value:200},
                 ]);
             return;
 
             } else if (kind === "Bronze"){
                 document.getElementById('detailTableTitle').innerHTML = 'AVG. Latency State Bronze';
                 table.setFilter([
-                {field:"latency", type:">=", value:200},
+                {field:"jitter", type:">=", value:200},
                 ]);
             return;
 
