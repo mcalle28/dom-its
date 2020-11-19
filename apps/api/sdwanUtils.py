@@ -72,7 +72,6 @@ class sdwan:
         return response.json()['data']
 
 
-
     def certificate(self):        
         url = '/dataservice/certificate/stats/summary'
         url = self.base_url_str+url 
@@ -94,8 +93,7 @@ class sdwan:
         payload = '{ "query": { "condition": "AND", "rules": [ { "value": [ "1" ], "field": "entry_time", "type": "date", "operator": "last_n_hours" }, { "value": [ "'+ip+'" ], "field": "vdevice_name", "type": "string", "operator": "in" } ] }, "aggregation": { "field": [ { "property": "name", "sequence": 1, "size": 6000 }, { "property": "src_ip", "sequence": 1, "size": 6000 }, { "property": "dst_ip", "sequence": 1, "size": 6000 }  , { "property": "local_color", "sequence": 1, "size": 6000 }, { "property": "remote_color", "sequence": 1, "size": 6000 }, { "property": "local_system_ip", "sequence": 1, "size": 6000 }, { "property": "remote_system_ip", "sequence": 1, "size": 6000 } ], "metrics": [ { "property": "loss_percentage", "type": "avg" }, { "property": "vqoe_score", "type": "avg" }, { "property": "latency", "type": "avg" }, { "property": "jitter", "type": "avg" }, { "property": "tx_octets", "type": "avg" },  { "property": "rx_octets", "type": "avg" } ] } }'
         response = self.session.post(url, data=payload, headers={'Content-Type': 'application/json'}, verify=False)
         
-        return response.json()['data']
-            
+        return response.json()['data']            
 
 
     def reachable(self, personality):
@@ -107,6 +105,12 @@ class sdwan:
         return response.json()['data']
 
 
+    def unReachable(self, personality):
+        url = '/dataservice/device/unreachable?personality='+personality
+        url = self.base_url_str+url 
+        response = self.session.get(url, verify=False)
+
+        return response.json()['data']
 
     def health(self, personality):
         url = '/dataservice/device/hardwarehealth/detail?state='+personality

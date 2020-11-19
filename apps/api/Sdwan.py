@@ -39,7 +39,10 @@ class Sdwan:
         return self.sdwans[vmid].tunnels(ip)
 
     def reachable(self, vmid, personality):
-        return self.sdwans[vmid].reachable(personality)       
+        return self.sdwans[vmid].reachable(personality)  
+
+    def unReachable(self, vmid, personality):
+        return self.sdwans[vmid].unReachable(personality)            
         
     def update(self):
         for vmanager in VManager.objects.all():

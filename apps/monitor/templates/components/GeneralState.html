@@ -71,10 +71,10 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vedge')" id="generalStatusWanEdge{{component.id}}" class="text-success font-weight-bold col">
+                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vedge','reachable')" id="generalStatusWanEdge{{component.id}}" class="text-success font-weight-bold col">
                                     <b>0</b>
                                 </div>
-                                <div id="generalStatusWanEdgeDown{{component.id}}" class="col font-weight-bold text-danger">
+                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vedge','unReachable')" id="generalStatusWanEdgeDown{{component.id}}" class="col font-weight-bold text-danger">
                                     <b>0</b>
                                 </div>
                             </div>
@@ -108,10 +108,10 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vbond')" id="generalStatusVBond{{component.id}}" class="text-success font-weight-bold col">
+                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vbond','reachable')" id="generalStatusVBond{{component.id}}" class="text-success font-weight-bold col">
                                     <b>0</b>
                                 </div>
-                                <div id="generalStatusVBondDown{{component.id}}" class="col font-weight-bold text-danger">
+                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vbond','unReachable')" id="generalStatusVBondDown{{component.id}}" class="col font-weight-bold text-danger">
                                     <b>0</b>
                                 </div>
                             </div>
@@ -145,10 +145,10 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vsmart')" id="generalStatusVSmart{{component.id}}" class=" font-weight-bold col text-success">
+                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vsmart','reachable')" id="generalStatusVSmart{{component.id}}" class=" font-weight-bold col text-success">
                                     <b>0</b>
                                 </div>
-                                <div id="generalStatusVSmartDown{{component.id}}" class=" font-weight-bold col text-danger">
+                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vsmart','unReachable')" id="generalStatusVSmartDown{{component.id}}" class=" font-weight-bold col text-danger">
                                     <b>0</b>
                                 </div>
                             </div>
@@ -260,13 +260,13 @@
 
 
 
-    function showTable{{component.id}}(personality) { 
+    function showTable{{component.id}}(personality, kind) { 
         
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
 
-        fetch('/api/reachable/{{component.vManager.id}}?personality='+personality)
+        fetch('/api/'+kind+'/{{component.vManager.id}}?personality='+personality)
         .then(response => response.json())
         .then(data => {          
            
@@ -284,11 +284,9 @@
                 {title:"BFD Down", field:"bfdSessionsDown", sorter:"string"},
                 {title:"Control Connections Up", field:"controlConnectionsUp", sorter:"string"},
                 {title:"Last Updated", field:"lastupdated", sorter:"string"},
-                
 
-            ]);
 
-            
+            ]);            
 
         
         });  
