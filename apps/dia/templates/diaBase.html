@@ -9,7 +9,7 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
+<!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css'%}">
   <!-- summernote -->
   <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.min.css'%}">
+  <!-- Tabulator -->
+  <link rel="stylesheet" href="{% static 'plugins/tabulator/dist/css/tabulator.min.css' %}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed'%}">
@@ -42,6 +44,12 @@
       </ul>
 
 
+      
+      <style>
+        .progress{
+            height: 0.5rem !important;
+        }
+    </style>
 
 
       <!-- Right navbar links -->
@@ -58,9 +66,9 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
+      {%load static%}
       <a href="/dashboard" class="brand-link">
-        <i class="fa fa-cog"></i>DOM
-        <span class="brand-text font-weight-light">- ITS</span>
+        <img class="img-fluid mx-auto d-block" src="{% static 'img/SD-DOM-W.png'%}">
       </a>
 
       <!-- Sidebar -->
@@ -68,40 +76,40 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
+          </div>
 
-          </div>
+          {% if request.session.admin == True %}
           <div class="info">
-            <a href="#" class="d-block">Admin</a>
+            <a href="/manage" class="d-block">Admin</a>
           </div>
+          {% endif %}
         </div>
 
-
+        <!-- SidebarSearch Form -->
+        
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+                      
+
+
+
+
           
+          <li class="nav-header">LogOut</li>
 
-
-          <li class="nav-header">Options</li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-cog"></i>
+          <li class="nav-item ">
+            <a href="/logout" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
-                Config
-                <i class="fas fa-angle-left right"></i>
+                LogOut                
               </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/dia/config"
-                  class="nav-link">
-                  <i class="nav-icon far fa-plus-square"></i>
-                  <p>D.I.A.</p>
-                </a>
-              </li>
-            </ul>
+            </a>     
           </li>
+
 
           </ul>
         </nav>
@@ -110,10 +118,58 @@
       <!-- /.sidebar -->
     </aside>
 
+
+
+
+        <!-- Modal -->
+<div class="modal fade" id="detailTableModal" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <div class="col-8">
+              <h5 class="modal-title" id="detailTableTitle">State platinum</h5>
+            </div>
+            <div class="col-3">
+              <input type="text" class="form-control" placeholder="Search" id="detailTableFilter"/>
+            </div>
+            <button type="button" class="col-1 close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+          <div id="detailTable"></div>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 
 
+
+    
 
       <!-- Main content -->
       <section class="content">
@@ -128,11 +184,38 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <footer class="main-footer">
       <strong>DOM by ITS INFOCOM</strong>
 
       <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 0.1.1a-pre
+        <b>Version</b> 1.00
       </div>
     </footer>
 
@@ -155,11 +238,17 @@
   <!-- Bootstrap 4 -->
   <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <!-- Tempusdominus Bootstrap 4 -->
+  <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
   <script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
   <!-- AdminLTE App -->
   <script src="{% static 'dist/js/adminlte.js' %}"></script>
 
+  <!-- Tabulator -->
+  <script src="{% static 'plugins/tabulator/dist/js/tabulator.min.js' %}"></script>
+
+
   {%block scripts%} {% endblock %}
+
 
 
 
