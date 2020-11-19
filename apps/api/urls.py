@@ -10,7 +10,7 @@ urlpatterns = [
     path('generalState/<id>',views.generalState),
     path('tunnels/<id>/<ip>', views.tunnels),
     path('reachable/<id>',views.reachable),
-    path('unReachable/<id>',views.reachable),
+    path('unReachable/<id>',views.unReachable),
     path('wanEdgeHealthDetail/<id>',views.wanEdgeHealthDetail),
     path('certificate/<id>', views.certificate),
     path('reboot/<id>', views.reboot),
