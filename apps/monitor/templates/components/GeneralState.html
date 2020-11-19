@@ -173,7 +173,7 @@
                                 <div class="col-12">
                                     <small>Last 24h</small>
                                 </div>
-                                <div style="margin-bottom: -2px;" id="reboots{{component.id}}" class="col-12">
+                                <div onclick="showBootTable{{component.id}}()" style="margin-bottom: -2px; cursor: pointer;" id="reboots{{component.id}}" class="col-12">
                                     1
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                                     <i class="fas fa-medal"></i> <small> Warnings</small>         
                                 </div>
 
-                                <div style="margin-bottom: 20px;" class="col-12">
+                                <div style="margin-bottom: 20px; cursor: pointer;" class="col-12">
                                     <div onclick="showCertTable{{component.id}}()" id="certificates{{component.id}}" class="col-4">0</div>          
                                 </div>
 
