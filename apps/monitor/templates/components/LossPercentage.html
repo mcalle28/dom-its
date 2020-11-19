@@ -141,7 +141,7 @@
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
-        $('#detailTableFilter').val("");
+        document.getElementById("detailTableFilter").value = "";
 
         fetch('/api/tunnels/{{component.vManager.id}}/{{component.title}}')
         .then(response => response.json())

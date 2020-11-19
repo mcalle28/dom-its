@@ -335,7 +335,7 @@
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
-        $('#detailTableFilter').val("");
+        document.getElementById("detailTableFilter").value = "";
 
         fetch('/api/boot/{{component.vManager.id}}')
         .then(response => response.json())

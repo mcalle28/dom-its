@@ -109,7 +109,7 @@
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
-        $('#detailTableFilter').val("");
+        document.getElementById("detailTableFilter").value = "";
 
         fetch('/api/controlStatusDetail/{{component.vManager.id}}?state='+detail)
         .then(response => response.json())
