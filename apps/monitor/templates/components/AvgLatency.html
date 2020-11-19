@@ -154,6 +154,7 @@
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
+        $('#detailTableFilter').val("");
 
         fetch('/api/tunnels/{{component.vManager.id}}/{{component.title}}')
         .then(response => response.json())

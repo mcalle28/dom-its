@@ -122,6 +122,7 @@
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
+        $('#detailTableFilter').val("");
 
         fetch('/api/wanEdgeHealthDetail/{{component.vManager.id}}?personality='+personality)
         .then(response => response.json())

@@ -335,6 +335,7 @@
         table.clearData();
 
         $('#detailTableModal').modal('toggle');
+        $('#detailTableFilter').val("");
 
         fetch('/api/boot/{{component.vManager.id}}')
         .then(response => response.json())
@@ -344,8 +345,8 @@
             table.setData(data);
 
             table.setColumns([
-                {title:"Hostname", field:"host-name", sorter:"string"},
-                {title:"System IP", field:"system-ip", sorter:"string"},
+                {title:"Hostname", field:"vdevice-host-name", sorter:"string"},
+                {title:"System IP", field:"vdevice-name", sorter:"string"},
                 {title:"Reboot Time", field:"reboot_date_time", sorter:"string"},
                 {title:"Reboot Reason", field:"reboot_reason", sorter:"string"},
 
