@@ -295,5 +295,36 @@
         
     };
 
+
+
+    function showCertTable{{component.id}}() { 
+        
+        table.clearData();
+
+        $('#detailTableModal').modal('toggle');
+
+        fetch('/api/certs/{{component.vManager.id}}')
+        .then(response => response.json())
+        .then(data => {          
+           
+            document.getElementById('detailTableTitle').innerHTML = ' Warning Certificates ';
+            table.setData(data);
+
+            table.setColumns([
+                {title:"Site Id", field:"deviceType", sorter:"number"},
+                {title:"Hostname", field:"host-name", sorter:"string"},
+                {title:"System IP", field:"system-ip", sorter:"string"},
+                {title:"Expiration Date", field:"expirationDate", sorter:"string"},
+                {title:"Expiration Status", field:"expirationStatus", sorter:"string"},
+
+            ]);            
+
+        
+        });  
+    
+
+        
+    };
+
     
 </script>

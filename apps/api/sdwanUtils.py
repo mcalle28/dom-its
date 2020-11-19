@@ -128,4 +128,10 @@ class sdwan:
         response = self.session.get(url, verify=False)
         return response.json()['data']
 
+    def certs(self):
+        url = '/dataservice/certificate/stats/detail?status=warning'
+        url = self.base_url_str+url
+        response = self.session.get(url, verify=False)
+        return response.json()['data']
+
 

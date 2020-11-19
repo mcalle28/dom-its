@@ -44,6 +44,10 @@ class Sdwan:
     def unReachable(self, vmid, personality):
         return self.sdwans[vmid].unReachable(personality)            
         
+    def certs(self, vmid):
+        return self.sdwans[vmid].certs(personality)            
+        
+
     def update(self):
         for vmanager in VManager.objects.all():
             self.sdwans[str(vmanager.id)] = sd(vmanager.ip, vmanager.user, vmanager.password)

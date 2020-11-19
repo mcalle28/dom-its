@@ -116,6 +116,10 @@ def health(request, personality):
 def certificate(request, id):
     return JsonResponse(sdwan.certificate(id),safe=False)
 
+def certs(request, id):
+    return JsonResponse(sdwan.certs(id),safe=False)
+
+
 def reboot(request, id):
     return JsonResponse(sdwan.reboot(id),safe=False)
 
