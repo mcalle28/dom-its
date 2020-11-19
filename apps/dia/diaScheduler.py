@@ -150,7 +150,7 @@ class DiaScheduler:
             dia.addSite(value['values'][0]['site-id'])
             noDia.removeSite(value['values'][0]['site-id'])
 
-            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
+            obj, created = WebhookLog.objects.get_or_create(hostName = value['values'][0]['host-name'], siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
             if not created:
                 obj.inDia=True
                 obj.hostName = value['values'][0]['host-name'] 
@@ -207,7 +207,7 @@ class DiaScheduler:
             noDia.addSite(value['values'][0]['site-id'])
             dia.removeSite(value['values'][0]['site-id'])
 
-            obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id']+ ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
+            obj, created = WebhookLog.objects.get_or_create(hostName = value['values'][0]['host-name'] ,siteId=value['values'][0]['site-id']+ ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
             if not created:
                 obj.inDia=False
                 obj.hostName = value['values'][0]['host-name'] 
