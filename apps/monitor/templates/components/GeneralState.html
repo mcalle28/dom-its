@@ -173,7 +173,7 @@
                                 <div class="col-12">
                                     <small>Last 24h</small>
                                 </div>
-                                <div onclick="showBootTable{{component.id}}()" style="margin-bottom: -2px; cursor: pointer;" id="reboots{{component.id}}" class="col-12">
+                                <div onclick="showBootTable{{component.id}}()" style="margin-bottom: -2px; cursor: pointer;" id="reboots{{component.id}}" class="col-12 font-weight-bold">
                                     1
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                 </div>
 
                                 <div style="margin-bottom: 20px; cursor: pointer;" class="col-12">
-                                    <div onclick="showCertTable{{component.id}}()" id="certificates{{component.id}}" class="col-4">0</div>          
+                                    <div onclick="showCertTable{{component.id}}()" id="certificates{{component.id}}" class="font-weight-bold">0</div>          
                                 </div>
 
                             </div>
@@ -283,7 +283,10 @@
                 {title:"BFD Up", field:"bfdSessionsUp", sorter:"string"},
                 {title:"BFD Down", field:"bfdSessionsDown", sorter:"string"},
                 {title:"Control Connections Up", field:"controlConnectionsUp", sorter:"string"},
-                {title:"Last Updated", field:"lastupdated", sorter:"string"},
+                {title:"Last Updated", field:"lastupdated", sorter:"string", formatter:function(cell, formatterParams, onRendered){
+                
+                return '' + new Date(cell.getValue()); 
+            },},
 
 
             ]);            

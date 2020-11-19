@@ -116,12 +116,16 @@
             table.setData(data);
 
             table.setColumns([
+                {title:"Host Name", field:"host-name", sorter:"string"},
                 {title:"Local System IP", field:"local-system-ip", sorter:"string"},
                 {title:"Site ID", field:"site-id", sorter:"string"},
-                {title:"Type", field:"device-type", sorter:"string"},
-                {title:"Host Name", field:"host-name", sorter:"string"},
-                {title:"BFD Sessions", field:"bfdSessions", sorter:"number"},
-
+                {title:"Device Model", field:"device-model", sorter:"string"},
+                {title:"Control Connections", field:"controlConnections", sorter:"number"},
+                {title:"Last Updated", field:"lastupdated", sorter:"number", formatter:function(cell, formatterParams, onRendered){
+                
+                return '' + new Date(cell.getValue()); 
+            },},
+                
             ]);
 
             
