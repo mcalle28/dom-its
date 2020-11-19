@@ -98,6 +98,10 @@ def reachable(request, id):
     personality = request.GET.get('personality','')
     return JsonResponse (sdwan.reachable(id,personality), safe=False)
 
+def unReachable(request, id):
+    personality = request.GET.get('personality','')
+    return JsonResponse (sdwan.unReachable(id,personality), safe=False)
+
 def network(request,personality):
     vm = request.GET.get('vm','')
     return JsonResponse(sdwans[vm].network(personality), safe=False)
