@@ -20,7 +20,7 @@ def initSchedulers():
 
         excluded = [a['siteId'] for a in excluded]
 
-        schedulers[str(v.webhookId).replace('-','')] = DiaScheduler('biz-internet', 30, sdwansObjs.sdwans[str(v.vManager.id)], str(v.vManager.id), excluded=excluded)
+        schedulers[str(v.webhookId).replace('-','')] = DiaScheduler('biz-internet', 20, sdwansObjs.sdwans[str(v.vManager.id)], str(v.vManager.id), excluded=excluded)
     
     return schedulers
 
