@@ -26,6 +26,7 @@ class Component(models.Model):
     h = models.IntegerField()
     vManager = models.ForeignKey("VManager", on_delete=models.CASCADE)
     title = models.CharField(max_length=64, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True, null=True)
 
 class Widget(models.Model):
     name = models.CharField(max_length=64)
@@ -63,6 +64,7 @@ class WebhookLog(models.Model):
     siteId = models.CharField(max_length=200)
     inDia = models.BooleanField(default=True)
     vManager = models.ForeignKey('VManager', on_delete=models.CASCADE)
+    hostName = models.CharField(max_length=64, blank=True, null=True)
 
 
     

@@ -55,12 +55,12 @@ def dashboard(request, id):
         widget = request.POST.get('widget')
         title = request.POST.get('title',' ')
         dbName = request.POST.get('dbName','-1')
+        name = request.POST.get('name','.')
         
-        if vm == '-1' and dbName != '-1':
-            
+        if vm == '-1' and dbName != '-1':            
             Dashboard(user=User.objects.get(id=request.session['user']), name=dbName).save()
         else:       
-            c = Component(x=0,y=0,w=0,h=0,vManager_id=vm,title=title,widget_id=widget,dashboard_id=id)
+            c = Component(x=0,y=0,w=0,h=0,vManager_id=vm,title=title,widget_id=widget,dashboard_id=id, name=name)
             c.save()
 
     vms = VManager.objects.all()
