@@ -32,13 +32,13 @@
                     <div class="row align-items-center geneRow">
                         <div class="col">
                             <div class="row align-items-center">
-                                <div class="col text-success">
+                                <div class="col">
                                     <i class="fas fa-angle-up"></i>
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div class="col text-success">
-                                    <b>1</b>
+                                <div class="col">
+                                    1
                                 </div>
                             </div>
 
@@ -63,19 +63,19 @@
                     <div class="row align-items-center geneRow">
                         <div class="col">
                             <div class="row align-items-center">
-                                <div class="col text-success">
+                                <div class="col">
                                     <i class="fas fa-angle-up"></i>
                                 </div>
-                                <div class="col text-danger">
+                                <div class="col">
                                     <i class="fas fa-angle-down"></i>
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vedge')" id="generalStatusWanEdge{{component.id}}" class="text-success font-weight-bold col">
-                                    <b>0</b>
+                                <div onclick="showTable{{component.id}}('vedge')" id="generalStatusWanEdge{{component.id}}" class="col">
+                                    0
                                 </div>
-                                <div id="generalStatusWanEdgeDown{{component.id}}" class="col font-weight-bold text-danger">
-                                    <b>0</b>
+                                <div id="generalStatusWanEdgeDown{{component.id}}" class="col">
+                                    0
                                 </div>
                             </div>
 
@@ -100,19 +100,19 @@
                     <div class="row align-items-center geneRow">
                         <div class="col">
                             <div class="row align-items-center">
-                                <div class="col text-success ">
+                                <div class="col">
                                     <i class="fas fa-angle-up"></i>
                                 </div>
-                                <div class="col text-danger">
+                                <div class="col">
                                     <i class="fas fa-angle-down"></i>
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vbond')" id="generalStatusVBond{{component.id}}" class="text-success font-weight-bold col">
-                                    <b>0</b>
+                                <div onclick="showTable{{component.id}}('vbond')" id="generalStatusVBond{{component.id}}" class="col">
+                                    0
                                 </div>
-                                <div id="generalStatusVBondDown{{component.id}}" class="col font-weight-bold text-danger">
-                                    <b>0</b>
+                                <div id="generalStatusVBondDown{{component.id}}" class="col">
+                                    0
                                 </div>
                             </div>
 
@@ -137,19 +137,19 @@
                     <div class="row align-items-center geneRow">
                         <div class="col">
                             <div class="row align-items-center">
-                                <div class="col text-success">
+                                <div class="col">
                                     <i class="fas fa-angle-up"></i>
                                 </div>
-                                <div class="col text-danger ">
+                                <div class="col">
                                     <i class="fas fa-angle-down"></i>
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div style="cursor: pointer;" onclick="showTable{{component.id}}('vsmart')" id="generalStatusVSmart{{component.id}}" class=" font-weight-bold col text-success">
-                                    <b>0</b>
+                                <div onclick="showTable{{component.id}}('vsmart')" id="generalStatusVSmart{{component.id}}" class="col">
+                                    0
                                 </div>
-                                <div id="generalStatusVSmartDown{{component.id}}" class=" font-weight-bold col text-danger">
-                                    <b>0</b>
+                                <div id="generalStatusVSmartDown{{component.id}}" class="col">
+                                    0
                                 </div>
                             </div>
 
@@ -167,20 +167,17 @@
                     <div class="row box2">
                         <div class="col">
                             <div class="certBox align-items-center row">
-                                <div class="col-12">
+                                <div class="col-10">
                                     <b>Reboot</b><br>
                                     <small>Last 24h</small>
-                                    <div id="reboots{{component.id}}" class="col-4">
-                                        1
-                                    </div>
                                 </div>
-                                
+                                <div class="col-2">
+                                    1
+                                </div>
                             </div>
                             <div class="align-items-center row">
-                                <div class="col-12">
-                                    <p><i class="fas fa-medal"></i><small> Warnings</small></p>
-                                         <div id="certificates{{component.id}}" class="">0</div>
-                                         
+                                <div class="col-10">
+                                    <p><i class="fas fa-medal"></i> 1<br><small>Warnings</small></p>
                                 </div>
 
                             </div>
@@ -225,26 +222,11 @@
 
 
             });
-        
     }
 
     update{{component.id}}();
 
     setInterval(update{{component.id}}, 15000);
-
-
-    fetch('/api/certificate/{{component.vManager.id}}')
-            .then(res => res.json())
-            .then(response => {
-                document.getElementById("certificates{{component.id}}").innerHTML = response.warning;
-    });
-
-    fetch('/api/reboot/{{component.vManager.id}}')
-            .then(res => res.json())
-            .then(response => {
-                document.getElementById("reboots{{component.id}}").innerHTML = response.count;
-    });
-
 
 
 
@@ -275,7 +257,10 @@
                 {title:"Control Connections Up", field:"controlConnectionsUp", sorter:"string"},
                 {title:"Site Id", field:"site-id", sorter:"number"},
 
-            ]);          
+            ]);
+
+            
+
         
         });  
     
