@@ -15,6 +15,7 @@ urlpatterns = [
     path('certificate/<id>', views.certificate),
     path('reboot/<id>', views.reboot),
     path('certs/<id>', views.certs),
+    path('boot/<id>', views.boot),
 
     path('network/<personality>', views.network),
     path('health/<personality>', views.health),

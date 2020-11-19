@@ -134,4 +134,9 @@ class sdwan:
         response = self.session.get(url, verify=False)
         return response.json()['data']
 
-
+    
+    def boot(self):
+        url = '/dataservice/device/reboothistory/details'
+        url = self.base_url_str+url
+        response = self.session.get(url, verify=False)
+        return response.json()['data']

@@ -123,11 +123,13 @@ def certs(request, id):
 def reboot(request, id):
     return JsonResponse(sdwan.reboot(id),safe=False)
 
+def boot(request, id):
+    return JsonResponse(sdwan.boot(id),safe=False)
+
 def get(request):
     return JsonResponse(list(sdwans.keys()), safe=False)
 
 def webhook(request, id):
-
     vm = VManager.objects.get(id=id)
     wh = [] 
     for w in WebhookLog.objects.filter(vManager=vm, inDia=False):
