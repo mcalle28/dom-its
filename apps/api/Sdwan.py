@@ -45,7 +45,7 @@ class Sdwan:
         return self.sdwans[vmid].unReachable(personality)            
         
     def certs(self, vmid):
-        return self.sdwans[vmid].certs(personality)            
+        return self.sdwans[vmid].certs()            
         
 
     def update(self):
