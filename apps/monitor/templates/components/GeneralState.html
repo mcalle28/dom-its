@@ -258,6 +258,8 @@
 
 <script>
 
+
+
     function showTable{{component.id}}(personality) { 
         
         table.clearData();
@@ -272,11 +274,17 @@
             table.setData(data);
 
             table.setColumns([
-                {title:"Device Model", field:"device-model", sorter:"string"},
-                {title:"Device Id", field:"deviceId", sorter:"string"},
-                {title:"State", field:"state", sorter:"string"},
-                {title:"Control Connections Up", field:"controlConnectionsUp", sorter:"string"},
+                {title:"Hostname", field:"host-name", sorter:"string"},
+                {title:"System IP", field:"system-ip", sorter:"string"},
                 {title:"Site Id", field:"site-id", sorter:"number"},
+                {title:"Device Model", field:"device-model", sorter:"string"},
+                {title:"Version", field:"version", sorter:"string"},
+                {title:"Chassis Number", field:"chassis-number", sorter:"string"},
+                {title:"BFD Up", field:"bfdSessionsUp", sorter:"string"},
+                {title:"BFD Down", field:"bfdSessionsDown", sorter:"string"},
+                {title:"Control Connections Up", field:"controlConnectionsUp", sorter:"string"},
+                {title:"Last Updated", field:"lastupdated", sorter:"string"},
+                
 
             ]);
 
