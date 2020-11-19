@@ -333,6 +333,7 @@
     function showBootTable{{component.id}}() { 
         
         table.clearData();
+        table.setFilter();
 
         $('#detailTableModal').modal('toggle');
         document.getElementById("detailTableFilter").value = "";

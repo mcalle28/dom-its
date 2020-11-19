@@ -120,6 +120,7 @@
     function showTable{{component.id}}(personality) { 
         
         table.clearData();
+        table.setFilter();
 
         $('#detailTableModal').modal('toggle');
         document.getElementById("detailTableFilter").value = "";

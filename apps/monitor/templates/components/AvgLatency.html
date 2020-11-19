@@ -152,6 +152,7 @@
     function showTable{{component.id}}(kind) { 
         
         table.clearData();
+        table.setFilter();
 
         $('#detailTableModal').modal('toggle');
         document.getElementById("detailTableFilter").value = "";
