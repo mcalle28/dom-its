@@ -53,12 +53,13 @@
                               </tr>
                             </thead>
                             <tbody>
+                              {%load format%}
                               {% for webhook in webhooks %}
                               <tr>                                
                                 <td>{{webhook.vManager.id}}</td>
                                 <td>{{webhook.vManager.name}}</td>
                                 <td>{{webhook.vManager.ip}}</td>
-                                <td>{{ request.META.HTTP_HOST }}/dia/webhook/{{webhook.webhookId}}</td>
+                                <td>https://domtenant1.itsinfocom.com/dia/webhook/{{webhook.webhookId|format }}</td>
                                 <td><span class="badge bg-success"><a href="{{webhook.webhookId}}">ON</a></span></td>
                               </tr>
                               {% endfor%}

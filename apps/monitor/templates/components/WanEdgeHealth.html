@@ -136,7 +136,8 @@
                 {title:"Sited Id", field:"site-id", sorter:"string"},
                 {title:"Device Model", field:"device-model", sorter:"number"},
                 {title:"Memory % (Las 1 hour)", field:"memUsageDisplay", sorter:"string"},
-                {title:"CPU Load Display", field:"cpuLoadDisplay", sorter:"string"},
+                {title:"CPU % ( Last 1 hour)", field:"cpuLoadDisplay", sorter:"string"},
+                {title:"HardWare", field:"hardwareState", sorter:"string"},
                 {title:"Last Updated", field:"lastupdated", sorter:"number", formatter:function(cell, formatterParams, onRendered){
                 
                 return '' + new Date(cell.getValue()); 
