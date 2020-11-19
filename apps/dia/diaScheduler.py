@@ -153,11 +153,13 @@ class DiaScheduler:
             obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
             if not created:
                 obj.inDia=True
+                obj.hostName = value['values'][0]['host-name'] 
                 obj.time = datetime.datetime.now()
                 obj.save()
             else:
                 obj.siteId=value['values'][0]['site-id'] + ' HostName: '+ value['values'][0]['host-name']
                 obj.inDia=True
+                obj.hostName = value['values'][0]['host-name'] 
                 obj.vManager = VManager.objects.get(id=self.vid)
                 obj.save()
 
@@ -208,11 +210,13 @@ class DiaScheduler:
             obj, created = WebhookLog.objects.get_or_create(siteId=value['values'][0]['site-id']+ ' HostName: '+ value['values'][0]['host-name'], vManager=VManager.objects.get(id=self.vid))
             if not created:
                 obj.inDia=False
+                obj.hostName = value['values'][0]['host-name'] 
                 obj.time = datetime.datetime.now()
                 obj.save()
             else:
                 obj.siteId=value['values'][0]['site-id'] +' HostName: '+ value['values'][0]['host-name']
-                obj.inDia=True
+                obj.inDia=False
+                obj.hostName = value['values'][0]['host-name'] 
                 obj.vManager = VManager.objects.get(id=self.vid)
                 obj.save()
 
