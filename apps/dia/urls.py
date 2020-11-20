@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+#aaesraaaa
 urlpatterns = [
     path('config/stream/<id>', views.stream),
     path('config/', views.config),
