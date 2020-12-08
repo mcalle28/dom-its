@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+#aaesraaaa
 urlpatterns = [
     path('config/stream/<id>', views.stream),
     path('config/', views.config),
@@ -10,5 +10,4 @@ urlpatterns = [
     path('config/p/NoDIAtoDIA', views.NoDIAtoDIA),
     path('config/<id>/download', views.downloadLog),
     path('config/<id>/noMon', views.excludeSites),
-    path('config/<id>/reset', views.reset)
 ]
