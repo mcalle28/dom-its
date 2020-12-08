@@ -16,6 +16,8 @@ urlpatterns = [
     path('reboot/<id>', views.reboot),
     path('certs/<id>', views.certs),
     path('boot/<id>', views.boot),
+    path('alerts/<id>', views.alerts),
+    path('alertsEx/<id>', views.alertsEx),
 
     path('network/<personality>', views.network),
     path('health/<personality>', views.health),

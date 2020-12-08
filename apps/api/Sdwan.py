@@ -48,7 +48,14 @@ class Sdwan:
         return self.sdwans[vmid].certs()  
 
     def boot(self, vmid):
-        return self.sdwans[vmid].boot()        
+        return self.sdwans[vmid].boot()      
+
+    def alerts(self, vmid, start, end):
+        
+        return self.sdwans[vmid].alerts(start, end)  
+
+    def alertsEx(self, vmid):
+        return self.sdwans[vmid].alertsEx()      
 
     def update(self):
         for vmanager in VManager.objects.all():
@@ -59,3 +66,5 @@ class Sdwan:
             schedule.run_pending()
             time.sleep(30)
             
+
+    

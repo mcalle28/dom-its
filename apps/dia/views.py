@@ -10,21 +10,30 @@ import time
 import datetime
 from django.conf import settings as djangoSettings
 from ..api.views import sdwan as sdwansObjs
+from .dia import Dia
 
 
 def initSchedulers():
     schedulers = {}
-    for v in webhookDb.objects.all():        
+    for v in webhookDb.objects.all():   
         
         excluded = ExcludeSite.objects.filter(webhook=v.webhookId).values('siteId')
 
         excluded = [a['siteId'] for a in excluded]
 
-        schedulers[str(v.webhookId).replace('-','')] = DiaScheduler('biz-internet', 20, sdwansObjs.sdwans[str(v.vManager.id)], str(v.vManager.id), excluded=excluded)
+        schedulers[str(v.webhookId).replace('-','')] = DiaScheduler('biz-internet', 30, sdwansObjs.sdwans[str(v.vManager.id)], str(v.vManager.id), excluded=excluded)
     
     return schedulers
 
-schedulers = initSchedulers()
+def initDia():
+    Dia('biz-internet',30)
+
+
+def reset():
+    pass
+
+
+initDia()
 
 
 def config(request):

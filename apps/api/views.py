@@ -4,7 +4,6 @@ from django.views.decorators.csrf import csrf_exempt
 from .migration import migration
 from .base import baseTipo1, titulosTipo1, titulosTipo2, baseTipo2
 from .Sdwan import Sdwan
-
 from ..monitor.models import VManager, Webhook, WebhookLog
 
 sdwan = Sdwan()
@@ -119,12 +118,20 @@ def certificate(request, id):
 def certs(request, id):
     return JsonResponse(sdwan.certs(id),safe=False)
 
-
 def reboot(request, id):
     return JsonResponse(sdwan.reboot(id),safe=False)
 
 def boot(request, id):
     return JsonResponse(sdwan.boot(id),safe=False)
+
+def alerts(request, id):
+    start = request.GET.get('start','na')
+    end = request.GET.get('end','na')    
+    return JsonResponse(sdwan.alerts(id, start, end), safe=False)
+
+def alertsEx(request, id): 
+    return JsonResponse(sdwan.alertsEx(id), safe=False)
+
 
 def get(request):
     return JsonResponse(list(sdwans.keys()), safe=False)

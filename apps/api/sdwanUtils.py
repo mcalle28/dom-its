@@ -90,7 +90,7 @@ class sdwan:
         url = '/dataservice/statistics/approute/fec/aggregation'
         url = self.base_url_str+url
 
-        payload = '{ "query": { "condition": "AND", "rules": [ { "value": [ "3" ], "field": "entry_time", "type": "date", "operator": "last_n_hours" }, { "value": [ "'+ip+'" ], "field": "vdevice_name", "type": "string", "operator": "in" } ] }, "aggregation": { "field": [ { "property": "name", "sequence": 1, "size": 6000 }, { "property": "src_ip", "sequence": 1, "size": 6000 }, { "property": "dst_ip", "sequence": 1, "size": 6000 }  , { "property": "local_color", "sequence": 1, "size": 6000 }, { "property": "remote_color", "sequence": 1, "size": 6000 }, { "property": "local_system_ip", "sequence": 1, "size": 6000 }, { "property": "remote_system_ip", "sequence": 1, "size": 6000 } ], "metrics": [ { "property": "loss_percentage", "type": "avg" }, { "property": "vqoe_score", "type": "avg" }, { "property": "latency", "type": "avg" }, { "property": "jitter", "type": "avg" }, { "property": "tx_octets", "type": "avg" },  { "property": "rx_octets", "type": "avg" } ] } }'
+        payload = '{ "query": { "condition": "AND", "rules": [ { "value": [ "1" ], "field": "entry_time", "type": "date", "operator": "last_n_hours" }, { "value": [ "'+ip+'" ], "field": "vdevice_name", "type": "string", "operator": "in" } ] }, "aggregation": { "field": [ { "property": "name", "sequence": 1, "size": 6000 }, { "property": "src_ip", "sequence": 1, "size": 6000 }, { "property": "dst_ip", "sequence": 1, "size": 6000 }  , { "property": "local_color", "sequence": 1, "size": 6000 }, { "property": "remote_color", "sequence": 1, "size": 6000 }, { "property": "local_system_ip", "sequence": 1, "size": 6000 }, { "property": "remote_system_ip", "sequence": 1, "size": 6000 } ], "metrics": [ { "property": "loss_percentage", "type": "avg" }, { "property": "vqoe_score", "type": "avg" }, { "property": "latency", "type": "avg" }, { "property": "jitter", "type": "avg" }, { "property": "tx_octets", "type": "avg" },  { "property": "rx_octets", "type": "avg" } ] } }'
         response = self.session.post(url, data=payload, headers={'Content-Type': 'application/json'}, verify=False)
         
         return response.json()['data']            
@@ -140,3 +140,24 @@ class sdwan:
         url = self.base_url_str+url
         response = self.session.get(url, verify=False)
         return response.json()['data']
+
+    def alerts(self, start, end, count='10000'):
+
+        url = '/dataservice/data/device/statistics/alarm?startDate='+str(end)+'&endDate='+str(start)+'&count='+count
+        url = self.base_url_str+url
+        
+        
+
+        response = self.session.get(url, verify=False)
+
+        return  response.json()['data']
+        
+
+        
+
+    def alertsEx(self, count='10000'):
+        url = '/dataservice/data/device/statistics/alarm?startDate=2020-11-26T10:10:59&endDate=2020-11-26T10:20:59&count='+count
+        url = self.base_url_str+url
+        response = self.session.get(url, verify=False)
+        return response.json()['data']
+        
