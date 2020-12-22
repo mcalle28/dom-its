@@ -105,6 +105,7 @@
               {% csrf_token %}
               <div class="modal-body">
                 <input type="hidden" name="wh" value="{{wh.webhookId}}">
+                <input type="hidden" name="vm" value="{{wh.vManager.id}}">
                 <input class="form-control" name="siteId" placeholder="Site id">
 
               </div>
@@ -223,6 +224,7 @@
               {% csrf_token %}
               <div class="modal-body">
                 <input type="hidden" name="wh" value="{{wh.webhookId}}">
+                <input type="hidden" name="vm" value="{{wh.vManager.id}}">
                 <input class="form-control" name="siteId" placeholder="Site id">
               </div>
               <div class="modal-footer">

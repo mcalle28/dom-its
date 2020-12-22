@@ -34,6 +34,25 @@ class Dia:
         for i in self.watchers:
             i.update()
 
+    def manual(self, vm, data):
+
+        obj = None
+
+        for i in self.watchers:
+
+            if str(i.vid) == vm:
+                obj = i
+                break
+
+        if obj is None:
+
+            return
+        
+        obj.setManual(data)
+
+
+
+
 
         
         

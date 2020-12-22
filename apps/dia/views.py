@@ -26,14 +26,14 @@ def initSchedulers():
     return schedulers
 
 def initDia():
-    Dia('biz-internet',30)
+    return Dia('biz-internet',30)
 
 
 def reset():
     pass
 
 
-initDia()
+diaInstance = initDia()
 
 
 def config(request):
@@ -66,7 +66,8 @@ def configId(request,id):
     return render(request, 'diaConfigDetail.html', context={'wh':wh,'excluded':es})
 
 def DIAtoNoDIA(request):
-    vm = request.POST.get('wh','-1').replace('-','')
+    wh = request.POST.get('wh','-1')
+    vm = request.POST.get('vm','-1')
     siteId = request.POST.get('siteId','-1') 
 
     data ={
@@ -89,12 +90,14 @@ def DIAtoNoDIA(request):
     
     }   
 
-    schedulers[vm].processRequest(data)
-    return  redirect('configDiaDetail', id=vm)
+    diaInstance.manual(vm, data)
+    #schedulers[vm].processRequest(data)
+    return  redirect('configDiaDetail', id=wh)
 
 
 def NoDIAtoDIA(request):
-    vm = request.POST.get('wh','-1').replace('-','')
+    wh = request.POST.get('wh','-1')
+    vm = request.POST.get('vm','-1')
     siteId = request.POST.get('siteId','-1')  
 
     data ={
@@ -116,16 +119,17 @@ def NoDIAtoDIA(request):
     "message": "A tloc came up",
     }    
 
-    schedulers[vm].processRequest(data)
-    return  redirect('configDiaDetail', id=vm)
+    diaInstance.manual(vm, data)
+    #schedulers[vm].processRequest(data)
+    return  redirect('configDiaDetail', id=wh)
 
 def stream(request,id):
     def event_stream():
 
         while True:
-            res = 'data:'+ schedulers[id.replace('-','')].getLastMessage()+ '\n\n'
+            #res = 'data:'+ schedulers[id.replace('-','')].getLastMessage()+ '\n\n'
             time.sleep(3)
-            yield (res)
+            yield ('res')
             
     return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
 

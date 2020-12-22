@@ -15,8 +15,8 @@ class DiaWatcher:
         self.color = color
         self.cTime = cTime
         self.vManager = sdwansObjs.sdwans[str(self.vid)]
-        self.lastMessage = []
         self.excluded = excluded
+        self.manual = []
 
 
 
@@ -33,13 +33,15 @@ class DiaWatcher:
         start = start.strftime("%Y-%m-%dT%H:%M:%S")
         end = end.strftime("%Y-%m-%dT%H:%M:%S")
 
+        print('Alarmas entre: '+end+' y '+start,len(self.manual))
+
         alerts = self.vManager.alerts(start, end)
         a = alerts
         
 
         down, up = self.filterAlerts(alerts)
 
-      
+        print(len(down) > 0 or len(up)>0 )
         
        
         self.operate(down, up)
@@ -57,7 +59,7 @@ class DiaWatcher:
                 downSites += (value['values'][0]['site-id'] + ' ')
                 noDia.addSite(value['values'][0]['site-id'])
                 dia.removeSite(value['values'][0]['site-id'])
-                #makeLog(value, True)
+                self.makeLog(value, True)
 
 
             
@@ -81,7 +83,7 @@ class DiaWatcher:
                 upSites += (value['values'][0]['site-id'] + ' ')
                 noDia.removeSite(value['values'][0]['site-id'])
                 dia.addSite(value['values'][0]['site-id'])
-                #makeLog(value, False)
+                self.makeLog(value, False)
 
           
 
@@ -117,9 +119,20 @@ class DiaWatcher:
         down = [a for a in alerts if a['message'] == "A tloc went down" and a['values'][0]['color'] == self.color]
         up = [a for a in alerts if a['message'] == "A tloc came up" and a['values'][0]['color'] == self.color]
 
+        if len(self.manual) > 0:
+            for man in self.manual:
+                if man['message'] == "A tloc went down":
+                    down.append(man)
+                else:
+                    up.append(man)
+
+            self.manual = []
+
         return down, up
 
         
+    def setManual(self, data):
+        self.manual.append(data)
 
 
        
