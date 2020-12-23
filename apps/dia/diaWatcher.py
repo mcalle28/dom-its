@@ -61,17 +61,20 @@ class DiaWatcher:
                 dia.removeSite(value['values'][0]['site-id'])
                 self.makeLog(value, True)
 
-
+            
             
             dia.sendToVmanager()
             while dia.isRunning():
                 time.sleep(1)
                 pass
-
+                
+                
             noDia.sendToVmanager()
             while noDia.isRunning():
                 time.sleep(1)
                 pass
+
+            
 
 
         if (len(up) != 0):
@@ -83,19 +86,21 @@ class DiaWatcher:
                 upSites += (value['values'][0]['site-id'] + ' ')
                 noDia.removeSite(value['values'][0]['site-id'])
                 dia.addSite(value['values'][0]['site-id'])
-                self.makeLog(value, False)
+                self.makeLog(value, False)          
 
-          
+            
 
             noDia.sendToVmanager()
             while noDia.isRunning():
                 time.sleep(1)
                 pass
-
+                
             dia.sendToVmanager()
             while dia.isRunning():
                 time.sleep(1)
                 pass
+
+            
 
 
 
