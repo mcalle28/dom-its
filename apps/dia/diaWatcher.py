@@ -43,7 +43,7 @@ class DiaWatcher:
 
         if len(down) > 0 or len(up)>0:
             self.setMessage('\n\n')
-            self.setMessage('Between: '+end+' and '+start + ' got ',len(down),'down devices and',len(up), 'up devices')
+            self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
             
         
        
