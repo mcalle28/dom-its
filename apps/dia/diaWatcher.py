@@ -41,7 +41,10 @@ class DiaWatcher:
 
         down, up = self.filterAlerts(alerts)
 
-        print(len(down) > 0 or len(up)>0 )
+        if len(down) > 0 or len(up)>0:
+            self.setMessage('\n\n')
+            self.setMessage('Between: '+end+' and '+start + ' got ',len(down),'down devices and',len(up), 'up devices')
+            
         
        
         self.operate(down, up)
@@ -53,6 +56,12 @@ class DiaWatcher:
         
             dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
             noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
+
+            self.setMessage('Actual NODIA State sites:')
+            self.setMessage(str([a['siteId'] for a in noDia.entries]))
+            self.setMessage('Actual DIA State sites:')
+            self.setMessage(str([a['siteId'] for a in dia.entries]))
+
 
             downSites = ''
             for value in down:
@@ -74,12 +83,27 @@ class DiaWatcher:
                 time.sleep(1)
                 pass
 
-            
+            self.setMessage('DIA-TO-NODIA Devices: '+str(downSites))        
+        
 
+            self.setMessage('NODIA new State')
+            self.setMessage(str([a['siteId'] for a in noDia.entries]))
+
+            self.setMessage('DIA new State')
+            self.setMessage(str([a['siteId'] for a in dia.entries]))
+
+            self.setMessage('-'*20+'Done'+'-'*20)
+            self.setMessage('\n\n')
 
         if (len(up) != 0):
             dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
             noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
+
+            self.setMessage('Actual NODIA State sites:')
+            self.setMessage(str([a['siteId'] for a in noDia.entries]))
+            self.setMessage('Actual DIA State sites:')
+            self.setMessage(str([a['siteId'] for a in dia.entries]))
+
 
             upSites = ''
             for value in up:
@@ -99,6 +123,19 @@ class DiaWatcher:
             while dia.isRunning():
                 time.sleep(1)
                 pass
+
+
+            self.setMessage('NODIA-TO-DIA Devices: '+str(upSites))        
+        
+
+            self.setMessage('NODIA new State')
+            self.setMessage(str([a['siteId'] for a in noDia.entries]))
+
+            self.setMessage('DIA new State')
+            self.setMessage(str([a['siteId'] for a in dia.entries]))
+
+            self.setMessage('-'*20+'Done'+'-'*20)
+            self.setMessage('\n\n')
 
             
 
@@ -140,4 +177,13 @@ class DiaWatcher:
         self.manual.append(data)
 
 
-       
+    def setMessage(self, message):
+
+        if message is None:
+            return
+        time = datetime.datetime.now()
+
+        f = open('./static/diaLogs/'+self.vManager.vmanage_ip.split('.')[0]+".log", "a+")
+        f.write('\n['+str(time)+']'+message)
+        f.close()
+        
