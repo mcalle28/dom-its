@@ -54,6 +54,7 @@ class DiaWatcher:
 
     def operate(self, down, up):
 
+        downSites = ''
         if(len(down) != 0):
         
             dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
@@ -96,7 +97,7 @@ class DiaWatcher:
 
             
             
-
+        upSites = ''
         if (len(up) != 0):
             dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
             noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
