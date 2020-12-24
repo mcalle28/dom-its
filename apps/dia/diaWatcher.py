@@ -95,6 +95,7 @@ class DiaWatcher:
             self.setMessage('DIA new State')
             self.setMessage(str([a['siteId'] for a in dia.entries]))
 
+            self.setMessage('-'*20+'Done (down: '+downSites+')'+'-'*20)
             
             
         upSites = ''
@@ -138,8 +139,8 @@ class DiaWatcher:
             self.setMessage('DIA new State')
             self.setMessage(str([a['siteId'] for a in dia.entries]))
 
-        self.setMessage('-'*20+'Done (up: '+upSites+' down: '+downSites+'-'*20)
-        self.setMessage('\n\n')
+            self.setMessage('-'*20+'Done (up: '+upSites+')'+'-'*20)
+            self.setMessage('\n\n')
 
             
 
