@@ -90,11 +90,11 @@ class DiaWatcher:
             self.setMessage('DIA-TO-NODIA Sites: '+str(downSites))        
         
 
-            self.setMessage('NODIA new State')
-            self.setMessage(str([a['siteId'] for a in noDia.entries]))
+            #self.setMessage('NODIA new State')
+            #self.setMessage(str([a['siteId'] for a in noDia.entries]))
 
-            self.setMessage('DIA new State')
-            self.setMessage(str([a['siteId'] for a in dia.entries]))
+            #self.setMessage('DIA new State')
+            #self.setMessage(str([a['siteId'] for a in dia.entries]))
 
             self.setMessage('-'*20+'Done (down: '+downSites+')'+'-'*20)
             
@@ -134,11 +134,11 @@ class DiaWatcher:
             self.setMessage('NODIA-TO-DIA Sites: '+str(upSites))        
         
 
-            self.setMessage('NODIA new State')
-            self.setMessage(str([a['siteId'] for a in noDia.entries]))
+            #self.setMessage('NODIA new State')
+            #self.setMessage(str([a['siteId'] for a in noDia.entries]))
 
-            self.setMessage('DIA new State')
-            self.setMessage(str([a['siteId'] for a in dia.entries]))
+            #self.setMessage('DIA new State')
+            #self.setMessage(str([a['siteId'] for a in dia.entries]))
 
             self.setMessage('-'*20+'Done (up: '+upSites+')'+'-'*20)
             self.setMessage('\n\n')
