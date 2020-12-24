@@ -59,11 +59,12 @@ class DiaWatcher:
         
             dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
             noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
-            self.setMessage('.'*10+'Down devices'+'.'*10)
-            self.setMessage('Actual NODIA State sites:')
-            self.setMessage(str([a['siteId'] for a in noDia.entries]))
-            self.setMessage('Actual DIA State sites:')
-            self.setMessage(str([a['siteId'] for a in dia.entries]))
+            
+
+            #self.setMessage('Actual NODIA State sites:')
+            #self.setMessage(str([a['siteId'] for a in noDia.entries]))
+            #self.setMessage('Actual DIA State sites:')
+            #self.setMessage(str([a['siteId'] for a in dia.entries]))
 
 
             downSites = ''
@@ -73,7 +74,7 @@ class DiaWatcher:
                 dia.removeSite(value['values'][0]['site-id'])
                 self.makeLog(value, True)
 
-            
+            self.setMessage('.'*10+'Down sites: '+downSites+'.'*10)
             
             dia.sendToVmanager()
             while dia.isRunning():
@@ -103,11 +104,11 @@ class DiaWatcher:
             dia = SiteManager('dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
             noDia = SiteManager('no dia', self.vManager.base_url_str, self.vManager.session, self.vManager.getFromDb())
 
-            self.setMessage('.'*10+'Up devices'+'.'*10)
-            self.setMessage('Actual NODIA State sites:')
-            self.setMessage(str([a['siteId'] for a in noDia.entries]))
-            self.setMessage('Actual DIA State sites:')
-            self.setMessage(str([a['siteId'] for a in dia.entries]))
+            
+            #self.setMessage('Actual NODIA State sites:')
+            #self.setMessage(str([a['siteId'] for a in noDia.entries]))
+            #self.setMessage('Actual DIA State sites:')
+            #self.setMessage(str([a['siteId'] for a in dia.entries]))
 
 
             upSites = ''
@@ -117,7 +118,7 @@ class DiaWatcher:
                 dia.addSite(value['values'][0]['site-id'])
                 self.makeLog(value, False)          
 
-            
+            self.setMessage('.'*10+'Up sites: '+upSites+'.'*10)
 
             noDia.sendToVmanager()
             while noDia.isRunning():
