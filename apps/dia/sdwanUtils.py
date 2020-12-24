@@ -59,7 +59,17 @@ class SiteManager:
         
         response = self.session.put(url, data=json.dumps(self.site), verify=False)
         
-        masterTemplate = response.json()['masterTemplatesAffected'][0]
+        wait = True
+
+        while wait:
+
+            try:
+                masterTemplate = response.json()['masterTemplatesAffected'][0]
+                wait = False
+            except:
+                time.sleep(10)
+                continue
+            
 
         print('%s Put para cambiar Site List de %s' %(str(datetime.now()),self.id))
         self.toConfigInput(masterTemplate)

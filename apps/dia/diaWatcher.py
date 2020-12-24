@@ -47,7 +47,9 @@ class DiaWatcher:
             
         
        
-        self.operate(down, up)
+        job_thread = threading.Thread(target=self.operate, args=(down, up))
+        job_thread.daemon = True
+        job_thread.start()  
         
 
     def operate(self, down, up):
