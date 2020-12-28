@@ -164,8 +164,8 @@ class DiaWatcher:
 
 
     def filterAlerts(self, alerts):
-        down = [a for a in alerts if a['message'] == "A tloc went down" and a['values'][0]['color'] == self.color]
-        up = [a for a in alerts if a['message'] == "A tloc came up" and a['values'][0]['color'] == self.color]
+        down = [a for a in alerts if a['message'] == "All BFD sessions for the tloc are down" and a['values'][0]['color'] == self.color]
+        up = [a for a in alerts if a['message'] == "BFD sessions for the tloc came up" and a['values'][0]['color'] == self.color]
 
         if len(self.manual) > 0:
             for man in self.manual:
