@@ -17,17 +17,22 @@ class DiaWatcher:
         self.vManager = sdwansObjs.sdwans[str(self.vid)]
         self.excluded = excluded
         self.manual = []
-        self.lastTime = datetime.datetime.now()
+        self.acum = 1
         self.onProcess = False
 
 
 
     def update(self):
 
+
+        if self.onProcess:
+            acum += 1
+            return
+
         self.vManager = sdwansObjs.sdwans[str(self.vid)]
         utc = datetime.timedelta(hours=5)
         start = datetime.datetime.now() 
-        summ = datetime.timedelta(seconds=self.cTime)
+        summ = datetime.timedelta(seconds=self.cTime * self.acum)
 
         start = start + utc
 
@@ -44,8 +49,9 @@ class DiaWatcher:
         down, up = self.filterAlerts(alerts)
 
         if len(down) > 0 or len(up)>0:
+            self.onProcess = True
             self.setMessage('\n\n')
-            self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
+        self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
             
                
         self.operate(down, up)
@@ -143,7 +149,8 @@ class DiaWatcher:
             self.setMessage('-'*20+'Done (up: '+upSites+')'+'-'*20)
             self.setMessage('\n\n')
 
-            self.onProcess = False
+        self.onProcess = False
+        self.acum = 1
 
             
 
