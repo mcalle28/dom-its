@@ -197,8 +197,6 @@ class DiaWatcher:
 
     def setMessage(self, message):
 
-        if message is None:
-            return
         time = datetime.datetime.now()
 
         f = open('./static/diaLogs/'+self.vManager.vmanage_ip.split('.')[0]+".log", "a+")
