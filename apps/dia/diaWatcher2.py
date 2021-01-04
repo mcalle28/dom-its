@@ -41,13 +41,15 @@ class DiaWatcher:
         end = end.strftime("%Y-%m-%dT%H:%M:%S")
 
         print('Alarmas entre: '+end+' y '+start)
-        self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
-
+        
         alerts = self.vManager.alerts(start, end)
         a = alerts
         
 
         down, up = self.filterAlerts(alerts)
+
+        self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
+
 
         if len(down) > 0 or len(up)>0:
             self.onProcess = True
