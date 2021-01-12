@@ -44,6 +44,10 @@ class DiaWatcher:
         
         alerts = self.vManager.alerts(start, end)
         down, up = self.filterAlerts(alerts)
+
+
+        self.setMessage('Control')
+
         self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
         
 
