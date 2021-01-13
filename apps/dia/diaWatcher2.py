@@ -26,6 +26,7 @@ class DiaWatcher:
 
 
         if self.onProcess:
+            setMessage('On process')
             acum += 1
             return
 
@@ -52,8 +53,7 @@ class DiaWatcher:
 
 
         if len(down) > 0 or len(up)>0:
-            self.onProcess = True
-            
+            self.onProcess = True           
         
             
                
