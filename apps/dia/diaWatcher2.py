@@ -217,7 +217,7 @@ class DiaWatcher:
 
         for u in up:
             if u['values'][0]['site-id'] not in oDown:
-                nUp.append(d)
+                nUp.append(u)
 
 
         return nDown, nUp
