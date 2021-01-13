@@ -26,7 +26,6 @@ class DiaWatcher:
 
 
         if self.onProcess:
-            self.setMessage('On process')
             self.acum += 1
             return
 
@@ -41,8 +40,8 @@ class DiaWatcher:
 
         end = start - summ
 
-        nonUtcStart = start
-        nonUtcEnd = end
+        nonUtcStart = str(start)
+        nonUtcEnd = str(end)
 
         start = start.strftime("%Y-%m-%dT%H:%M:%S")
         end = end.strftime("%Y-%m-%dT%H:%M:%S")
@@ -53,7 +52,7 @@ class DiaWatcher:
         down, up = self.filterAlerts(alerts)
 
         
-        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
+        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices. (x'+self.acum+')')
         
 
 
