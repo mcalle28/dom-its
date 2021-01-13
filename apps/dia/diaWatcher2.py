@@ -31,8 +31,9 @@ class DiaWatcher:
         start = datetime.datetime.now() 
         
 
+        nonUtcStart = str(start)
+        nonUtcEnd = str(self.lastTime)
         
-
         start = start + utc
 
 
@@ -42,8 +43,8 @@ class DiaWatcher:
             self.lastTime = end.strftime("%Y-%m-%dT%H:%M:%S")
 
 
-        nonUtcStart = str(start)
-        nonUtcEnd = str(self.lastTime)
+        
+        
 
         start = start.strftime("%Y-%m-%dT%H:%M:%S")
         end = self.lastTime
@@ -56,7 +57,7 @@ class DiaWatcher:
         down, up = self.filterAlerts(alerts)
 
         
-        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices. (x'+str(self.acum)+')')
+        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices.')
         
 
 
