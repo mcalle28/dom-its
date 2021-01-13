@@ -39,14 +39,14 @@ class DiaWatcher:
         if self.lastTime is None:
             summ = datetime.timedelta(seconds=self.cTime)
             end = start - summ
-            self.lastTime = end
+            self.lastTime = end.strftime("%Y-%m-%dT%H:%M:%S")
 
 
         nonUtcStart = str(start)
         nonUtcEnd = str(self.lastTime)
 
         start = start.strftime("%Y-%m-%dT%H:%M:%S")
-        end = self.lastTime.strftime("%Y-%m-%dT%H:%M:%S")
+        end = self.lastTime
 
         
         alerts = self.vManager.alerts(start, end)
