@@ -27,7 +27,7 @@ class DiaWatcher:
 
         if self.onProcess:
             self.setMessage('On process')
-            acum += 1
+            self.acum += 1
             return
 
         self.vManager = sdwansObjs.sdwans[str(self.vid)]
