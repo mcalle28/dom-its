@@ -201,23 +201,7 @@ class DiaWatcher:
                     up.append(man)
             self.manual = []
 
-
-        
-       ''' oDown = [a['values'][0]['site-id'] for a in down]
-        oUp = [a['values'][0]['site-id'] for a in up]
-
-
-        nDown = []
-        nUp = []
-        
-
-        for d in down:
-            if d['values'][0]['site-id'] not in oUp:
-                nDown.append(d)
-
-        for u in up:
-            if u['values'][0]['site-id'] not in oDown:
-                nUp.append(u)'''
+       
 
 
         return down, up
