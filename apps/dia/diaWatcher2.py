@@ -45,9 +45,7 @@ class DiaWatcher:
         alerts = self.vManager.alerts(start, end)
         down, up = self.filterAlerts(alerts)
 
-
-        self.setMessage('Control')
-
+        
         self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
         
 
@@ -199,6 +197,8 @@ class DiaWatcher:
     def setMessage(self, message):
 
         time = datetime.datetime.now()
+
+        print('Sí entra al setMessage',str(time))
 
         f = open('./static/diaLogs/'+self.vManager.vmanage_ip.split('.')[0]+".log", "a+")
         f.write('\n['+str(time)+']'+message)

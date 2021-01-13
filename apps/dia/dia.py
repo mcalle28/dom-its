@@ -1,5 +1,5 @@
 from ..monitor.models import Webhook, ExcludeSite
-from .diaWatcher import DiaWatcher
+from .diaWatcher2 import DiaWatcher
 import schedule
 import time 
 import threading
