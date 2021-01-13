@@ -52,7 +52,7 @@ class DiaWatcher:
         down, up = self.filterAlerts(alerts)
 
         
-        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices. (x'+self.acum+')')
+        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices. (x'+str(self.acum)+')')
         
 
 
