@@ -111,7 +111,7 @@ def NoDIAtoDIA(request):
             "color": "biz-internet",
             "system-ip": "0.0.0.0",
             "host-name": "DOM generated",
-            "site-id": siteId
+            "site-id": site
             }
         ],
         "values_short_display": [
