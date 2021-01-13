@@ -26,6 +26,10 @@ class DiaWatcher:
     def update(self):
 
 
+        if self.onProcess:
+            return
+
+
         self.vManager = sdwansObjs.sdwans[str(self.vid)]
         utc = datetime.timedelta(hours=5)
         start = datetime.datetime.now() 
