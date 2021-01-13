@@ -20,35 +20,39 @@ class DiaWatcher:
         self.acum = 1
         self.onProcess = False
 
+        self.lastTime = None
 
 
     def update(self):
 
 
-        if self.onProcess:
-            self.acum += 1
-            return
-
         self.vManager = sdwansObjs.sdwans[str(self.vid)]
         utc = datetime.timedelta(hours=5)
         start = datetime.datetime.now() 
-        summ = datetime.timedelta(seconds=self.cTime * self.acum)
+        
 
         
 
         start = start + utc
 
-        end = start - summ
+
+        if self.lastTime is None:
+            summ = datetime.timedelta(seconds=self.cTime)
+            end = start - summ
+            self.lastTime = end
+
 
         nonUtcStart = str(start)
-        nonUtcEnd = str(end)
+        nonUtcEnd = str(self.lastTime)
 
         start = start.strftime("%Y-%m-%dT%H:%M:%S")
-        end = end.strftime("%Y-%m-%dT%H:%M:%S")
+        end = self.lastTime.strftime("%Y-%m-%dT%H:%M:%S")
 
-        print('Alarmas entre: '+end+' y '+start)
         
         alerts = self.vManager.alerts(start, end)
+
+        self.lastTime = start
+
         down, up = self.filterAlerts(alerts)
 
         
