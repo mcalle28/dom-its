@@ -32,8 +32,12 @@ class DiaWatcher:
         
 
         nonUtcStart = str(start)
-        nonUtcEnd = str(self.lastTime)
-        
+
+        try:
+            nonUtcEnd =  str(datetime.datetime.strptime(self.lastTime,"%Y-%m-%dT%H:%M:%S") - utc)
+        except:
+            nonUtcEnd = 'Just started'
+
         start = start + utc
 
 
