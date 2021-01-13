@@ -103,26 +103,28 @@ def NoDIAtoDIA(request):
     vm = request.POST.get('vm','-1')
     siteId = request.POST.get('siteId','-1')  
 
-    data ={
-    "values": [
-        {
-        "color": "biz-internet",
-        "system-ip": "0.0.0.0",
-        "host-name": "DOM generated",
-        "site-id": siteId
-        }
-    ],
-    "values_short_display": [
-        {
-        "color": "biz-internet",
-        "system-ip": "0.0.0.0",
-        "host-name": "..."
-        }
-    ],
-    "message": "A tloc came up",
-    }    
+    for site in siteId.split(','):
 
-    diaInstance.manual(vm, data)
+        data ={
+        "values": [
+            {
+            "color": "biz-internet",
+            "system-ip": "0.0.0.0",
+            "host-name": "DOM generated",
+            "site-id": siteId
+            }
+        ],
+        "values_short_display": [
+            {
+            "color": "biz-internet",
+            "system-ip": "0.0.0.0",
+            "host-name": "..."
+            }
+        ],
+        "message": "A tloc came up",
+        }    
+
+        diaInstance.manual(vm, data)
     #schedulers[vm].processRequest(data)
     return  redirect('configDiaDetail', id=wh)
 
