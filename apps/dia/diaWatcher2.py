@@ -35,9 +35,15 @@ class DiaWatcher:
         start = datetime.datetime.now() 
         summ = datetime.timedelta(seconds=self.cTime * self.acum)
 
+        
+
         start = start + utc
 
         end = start - summ
+
+        nonUtcStart = start
+        nonUtcEnd = end
+
         start = start.strftime("%Y-%m-%dT%H:%M:%S")
         end = end.strftime("%Y-%m-%dT%H:%M:%S")
 
@@ -47,7 +53,7 @@ class DiaWatcher:
         down, up = self.filterAlerts(alerts)
 
         
-        self.setMessage('Between: '+end+' and '+start + ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
+        self.setMessage('Between: '+str(nonUtcEnd)+' and '+str(nonUtcStart)+ ' got '+str(len(down))+' down devices and '+str(len(up))+ ' up devices')
         
 
 
@@ -198,7 +204,7 @@ class DiaWatcher:
 
         time = datetime.datetime.now()
 
-        print('Sí entra al setMessage',str(time))
+        #print('Sí entra al setMessage',str(time))
 
         f = open('./static/diaLogs/'+self.vManager.vmanage_ip.split('.')[0]+".log", "a+")
         f.write('\n['+str(time)+']'+message)
