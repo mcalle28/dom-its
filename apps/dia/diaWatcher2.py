@@ -203,7 +203,7 @@ class DiaWatcher:
 
 
         
-        oDown = [a['values'][0]['site-id'] for a in down]
+       ''' oDown = [a['values'][0]['site-id'] for a in down]
         oUp = [a['values'][0]['site-id'] for a in up]
 
 
@@ -217,10 +217,10 @@ class DiaWatcher:
 
         for u in up:
             if u['values'][0]['site-id'] not in oDown:
-                nUp.append(u)
+                nUp.append(u)'''
 
 
-        return nDown, nUp
+        return down, up
 
         
     def setManual(self, data):
