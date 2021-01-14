@@ -68,6 +68,7 @@ class SiteManager:
                 wait = False
             except:
                 time.sleep(10)
+                response = self.session.put(url, data=json.dumps(self.site), verify=False)
                 continue
             
 
