@@ -21,6 +21,7 @@ urlpatterns = [
     path('', include('apps.monitor.urls')),
     path('api/', include('apps.api.urls')),
     path('dia/', include('apps.dia.urls')),
+    path('reporting/', include('apps.reporting.urls')),
     path('manage/', include('apps.manage.urls')),
     path('microsoft/', include('microsoft_auth.urls', namespace='microsoft')),
     

@@ -188,6 +188,12 @@
                       </a>
                     </li>
 
+                    <li class="nav-item">
+                      <a data-toggle="modal" data-target="#modalBandWidth" href="#" class="nav-link">
+                        <i class="nav-icon far fa-plus-square"></i>
+                        <p>BandWidth</p>
+                      </a>
+                    </li>
 
                   </ul>
                 </li>
@@ -225,6 +231,25 @@
                       <a href="/dia/config" class="nav-link">
                         <i class="nav-icon far fa-plus-square"></i>
                         <p>Config. DIA</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+
+
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon far fa-circle"></i>
+                    <p>
+                      Reporting
+                      <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="/reporting/" class="nav-link">
+                        <i class="nav-icon far fa-plus-square"></i>
+                        <p>Generate a report</p>
                       </a>
                     </li>
                   </ul>
@@ -500,6 +525,46 @@ aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                   <option value="{{vm.pk}}">{{vm.fields.name}}</option>
                   {% endfor %}
                 </select>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalBandWidth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New DIA BandWidth</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" value="9" name="widget">
+                <label for="recipient-name" class="col-form-label">Vmanager:</label>
+                <select class="form-control" name="vm">
+                  {%for vm in request.session.vms%}
+                  <option value="{{vm.pk}}">{{vm.fields.name}}</option>
+                  {% endfor %}
+                </select>
+                <label for="recipient-name" class="col-form-label">CSV:</label>
+                <input type="file">
+
               </div>
 
             </div>
