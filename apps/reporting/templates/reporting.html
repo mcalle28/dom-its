@@ -1,0 +1,274 @@
+{% extends "diaBase.html" %}
+
+{% block content %}
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Automatic export CSV files application</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">DashBoard</a></li>
+            <li class="breadcrumb-item active">Report</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                
+                <div class="card card-primary card-outline">
+                    <div class="card-body">
+                        <h5 class="card-header">
+
+                          <div class="row">
+                            <div class="col">
+                                <h3 class="card-title">
+                                    Generate a report:
+                                </h3>
+                            </div>
+                            
+                          
+                        </h5>
+
+                        <p class="card-text">
+                          
+                          <div class="row">
+                          
+
+                            
+                            <div class="">
+                              <label>Vmanager:</label>
+                            </div>
+                            
+                            <div class="col col-md-4">
+                              <select class="form-control">
+                                <option>Exito</option>
+                              </select>                
+                            
+                            
+                          
+                        </div>
+                          
+                            <div class="">
+                              <label>From:</label>
+                            </div>
+                            <div class="col col-md-3">
+                              <input id="from" class="form-control" type="date"/>
+                            
+                            
+                          </div>
+
+
+                          <div class="">
+                            <label>To:</label>
+                          </div>
+                          <div class="col col-md-3">
+                            <input id="to" class="form-control" type="date"/>                           
+                          
+                          
+                        </div>
+
+                          </div>
+                          <hr>
+                        <div class="row">
+                          <div class="">
+                            <label>AAR:</label>
+                          </div>
+                          
+                          <div class="col col-md-2">
+                            <input id="aar" type="checkbox"/>     
+                        </div>       
+                        <div class="">
+                          <label>Aplications:</label>
+                        </div>
+                        
+                        <div class="col col-md-2">
+                          <input id="app" type="checkbox"/>     
+                      </div>       
+
+                      <div class="">
+                        <label>Memory:</label>
+                      </div>
+                      
+                      <div class="col col-md-2">
+                        <input id="mem" type="checkbox"/>     
+                    </div>       
+
+                    <div class="">
+                      <label>Interface:</label>
+                    </div>
+                    
+                    <div class="col col-md-2">
+                      <input id="int" type="checkbox"/>     
+                  </div>   
+                  <hr>    
+                      </div>
+                      <a onclick="get()" class="btn btn-primary text-white">Generate</a>
+                        </p> 
+                    </div>
+                </div><!-- /.card -->
+            </div>
+
+
+            
+            <!-- /.col-md-6 -->
+           
+            <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+
+        
+    </div><!-- /.container-fluid -->
+</div>
+
+
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Manual export CSV files</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">DashBoard</a></li>
+          <li class="breadcrumb-item active">Report</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<div class="content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12">
+              
+              <div class="card card-primary card-outline">
+                  <div class="card-body">
+                      <h5 class="card-header">
+
+                        <div class="row">
+                          <div class="col">
+                              <h3 class="card-title">
+                                  Generate a report:
+                              </h3>
+                          </div>
+                          
+                        
+                      </h5>
+
+                      <p class="card-text">
+                        
+                        <div class="row">
+                        
+
+                          
+                          <div class="">
+                            <label>Vmanager:</label>
+                          </div>
+                          
+                          <div class="col col-md-4">
+                            <select class="form-control">
+                              <option>Exito</option>
+                            </select>                
+                          
+                          
+                        
+                      </div>
+                        
+                          <div class="">
+                            <label>From:</label>
+                          </div>
+                          <div class="col col-md-3">
+                            <input class="form-control" type="date"/>
+                          
+                          
+                        </div>
+
+
+                        <div class="">
+                          <label>To:</label>
+                        </div>
+                        <div class="col col-md-3">
+                          <input class="form-control" type="date"/>                           
+                        
+                        
+                      </div>
+
+                        </div>
+                        <hr>
+                      <div class="row">
+                        <div class="">
+                          <label>AAR:</label>
+                        </div>
+                        
+                        <div class="col col-md-2">
+                          <input type="checkbox"/>     
+                      </div>       
+                      <div class="">
+                        <label>Aplications:</label>
+                      </div>
+                      
+                      <div class="col col-md-2">
+                        <input type="checkbox"/>     
+                    </div>       
+
+                    <div class="">
+                      <label>Memory:</label>
+                    </div>
+                    
+                    <div class="col col-md-2">
+                      <input type="checkbox"/>     
+                  </div>       
+
+                  <div class="">
+                    <label>Interface:</label>
+                  </div>
+                  
+                  <div class="col col-md-2">
+                    <input type="checkbox"/>     
+                </div>   
+                <hr>    
+                    </div>
+                    <a class="btn btn-primary text-white">Generate</a>
+                      </p> 
+                  </div>
+              </div><!-- /.card -->
+          </div>
+
+
+          
+          <!-- /.col-md-6 -->
+         
+          <!-- /.col-md-6 -->
+      </div>
+      <!-- /.row -->
+
+      
+  </div><!-- /.container-fluid -->
+</div>
+
+<script>
+  function get(){
+    
+    from = document.getElementById('from').value
+    to = document.getElementById('to').value
+
+    aar = document.getElementById('aar').checked
+    app = document.getElementById('app').checked
+    mem = document.getElementById('mem').checked
+    int = document.getElementById('int').checked
+
+    location.href = "http://172.29.25.29:5000/report?start="+from+"&end="+to+"&mem="+mem+"&aar="+aar+"&app="+app+"&int="+int
+
+  }
+</script>
+
+{%endblock%}

@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS = ['domtenant1.itsinfocom.com']
 
 INSTALLED_APPS = [
     'sslserver',
+    'apps.reporting',
     'apps.monitor',
     'apps.manage',
     'apps.dia',
