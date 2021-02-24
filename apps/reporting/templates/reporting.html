@@ -105,7 +105,7 @@
 
 
                     <div class="col col-md-2">
-                      <input id="audilogs" type="checkbox"/>     
+                      <input id="lgs" type="checkbox"/>     
                   </div>       
                   <div class="">
                     <label>Audilogs:</label>
@@ -114,7 +114,7 @@
 
                   <!--Events-->
                   <div class="col col-md-2">
-                    <input id="eventsAar" type="checkbox"/>     
+                    <input id="ear" type="checkbox"/>     
                 </div>       
                 <div class="">
                   <label>Events AAR:</label>
@@ -123,7 +123,7 @@
 
                 <!--Alarmas-->
                 <div class="col col-md-2">
-                  <input id="tloc" type="checkbox"/>     
+                  <input id="tlo" type="checkbox"/>     
               </div>       
               <div class="">
                 <label>Tloc State:</label>
@@ -131,7 +131,7 @@
 
 
               <div class="col col-md-2">
-                <input id="dispo" type="checkbox"/>     
+                <input id="dis" type="checkbox"/>     
             </div>       
             <div class="">
               <label>Disponibility:</label>
@@ -304,8 +304,13 @@
     app = document.getElementById('app').checked
     mem = document.getElementById('mem').checked
     int = document.getElementById('int').checked
+    tlo = document.getElementById('tlo').checked
+    ear = document.getElementById('ear').checked
+    lgs = document.getElementById('lgs').checked
+    dis = document.getElementById('dis').checked
 
-    location.href = "https://172.29.25.29:5000/report?start="+from+"&end="+to+"&mem="+mem+"&aar="+aar+"&app="+app+"&int="+int
+
+    location.href = "https://172.29.25.29:5000/report?start="+from+"&end="+to+"&mem="+mem+"&aar="+aar+"&app="+app+"&int="+int+"&tloc="+tlo+"&audit="+log+"&events="+ear+"&dispo="+dis
 
   }
 </script>
