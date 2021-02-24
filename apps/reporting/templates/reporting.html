@@ -101,6 +101,45 @@
                         <input id="mem" type="checkbox"/>     
                     </div>       
 
+
+
+
+                    <div class="col col-md-2">
+                      <input id="audilogs" type="checkbox"/>     
+                  </div>       
+                  <div class="">
+                    <label>Audilogs:</label>
+                  </div>
+
+
+                  <!--Events-->
+                  <div class="col col-md-2">
+                    <input id="eventsAar" type="checkbox"/>     
+                </div>       
+                <div class="">
+                  <label>Events AAR:</label>
+                </div>
+
+
+                <!--Alarmas-->
+                <div class="col col-md-2">
+                  <input id="tloc" type="checkbox"/>     
+              </div>       
+              <div class="">
+                <label>Tloc State:</label>
+              </div>
+
+
+              <div class="col col-md-2">
+                <input id="dispo" type="checkbox"/>     
+            </div>       
+            <div class="">
+              <label>Disponibility:</label>
+            </div>
+
+
+
+
                     <div class="">
                       <label>Interface:</label>
                     </div>
@@ -266,7 +305,7 @@
     mem = document.getElementById('mem').checked
     int = document.getElementById('int').checked
 
-    location.href = "http://172.29.25.29:5000/report?start="+from+"&end="+to+"&mem="+mem+"&aar="+aar+"&app="+app+"&int="+int
+    location.href = "https://172.29.25.29:5000/report?start="+from+"&end="+to+"&mem="+mem+"&aar="+aar+"&app="+app+"&int="+int
 
   }
 </script>
