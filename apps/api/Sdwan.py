@@ -15,7 +15,12 @@ class Sdwan:
         job_thread.start()
     
     def wanEdgeHealth(self, vmid):
-        return self.sdwans[vmid].wanEdgeHealth()
+        response = self.sdwans[vmid].wanEdgeHealth()
+        if response["error"] and response["error"] == -1:
+            self.update
+            return {}
+        else:
+            return response
 
     def certificate(self, vmid):
         return self.sdwans[vmid].certificate()

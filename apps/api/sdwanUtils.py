@@ -2,6 +2,7 @@ import requests
 import urllib3
 from ..monitor.models import VManager
 import sys
+import datetime
 
 class sdwan:
 
@@ -46,11 +47,13 @@ class sdwan:
 
     
     def log_conn(self, mensaje):
+        date_time = datetime.datetime.now()
+        current = date_time.strftime("%Y-%b-%d %H:%M")
         path = "/home/dom-its/dom-its/log_conn.txt"
         original_stdout = sys.stdout
         with open(path, 'w') as f:
             sys.stdout = f
-            print(mensaje)
+            print(current + " : " + mensaje)
             sys.stdout = original_stdout
 
 
@@ -62,7 +65,7 @@ class sdwan:
             return response.json()['data'][0]
         except Exception as e:
             self.log_conn("wanEdgeHealth conection is down. %s" %e)
-            return {}
+            return {"error":-1}
 
     def controlStatus(self):
         try:        
