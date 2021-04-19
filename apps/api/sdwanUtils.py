@@ -1,6 +1,7 @@
 import requests
 import urllib3
 from ..monitor.models import VManager
+import sys
 
 class sdwan:
 
@@ -43,121 +44,174 @@ class sdwan:
     def getFromDb(self):
         return VManager.objects.get(ip=self.vmanage_ip)
 
-
-    def wanEdgeHealth(self):        
-        url = '/dataservice/device/hardwarehealth/summary'
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data'][0]
-
-    def controlStatus(self):        
-        url = '/dataservice/device/control/count'
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data'][0]
+    
+    def log_conn(self, mensaje):
+        path = "/home/dom-its/dom-its/log_conn.txt"
+        original_stdout = sys.stdout
+        with open(path, 'w') as f:
+            sys.stdout = f
+            print(mensaje)
+            sys.stdout = original_stdout
 
 
-    def controlStatusDetail(self, detail):        
-        url = '/dataservice/device/control/networksummary?state='+detail
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data']
+    def wanEdgeHealth(self):
+        try:        
+            url = '/dataservice/device/hardwarehealth/summary'
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data'][0]
+        except Exception as e:
+            self.log_conn("wanEdgeHealth conection is down. %s" %e)
+            return {}
+
+    def controlStatus(self):
+        try:        
+            url = '/dataservice/device/control/count'
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data'][0]
+        except Exception as e:
+            self.log_conn("controlStatus conection is down. %s" %e)
+            return {}
+
+    def controlStatusDetail(self, detail):
+        try:        
+            url = '/dataservice/device/control/networksummary?state='+detail
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("controlStatusDetail conection is down. %s" %e)
+            return {}
     
 
     def generalState(self):
-        url = '/dataservice/network/connectionssummary'
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-
-        return response.json()['data']
-
-
-    def certificate(self):        
-        url = '/dataservice/certificate/stats/summary'
-        url = self.base_url_str+url 
-        response = self.session.get(url, verify=False)
-        return response.json()['data'][0]
+        try:
+            url = '/dataservice/network/connectionssummary'
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("generalState conection is down. %s" %e)
+            return {}
 
 
-    def reboot(self):        
-        url = '/dataservice/network/issues/rebootcount'
-        url = self.base_url_str+url 
-        response = self.session.get(url, verify=False)
-        return response.json()['data'][0]
+    def certificate(self):
+        try:        
+            url = '/dataservice/certificate/stats/summary'
+            url = self.base_url_str+url 
+            response = self.session.get(url, verify=False)
+            return response.json()['data'][0]
+        except Exception as e:
+            self.log_conn("certificate conection is down. %s" %e)
+            return {}
+
+
+    def reboot(self):
+        try:        
+            url = '/dataservice/network/issues/rebootcount'
+            url = self.base_url_str+url 
+            response = self.session.get(url, verify=False)
+            return response.json()['data'][0]
+        except Exception as e:
+            self.log_conn("reboot conection is down. %s" %e)
+            return {}
 
   
     def tunnels(self, ip):
-        url = '/dataservice/statistics/approute/fec/aggregation'
-        url = self.base_url_str+url
-
-        payload = '{ "query": { "condition": "AND", "rules": [ { "value": [ "3" ], "field": "entry_time", "type": "date", "operator": "last_n_hours" }, { "value": [ "'+ip+'" ], "field": "vdevice_name", "type": "string", "operator": "in" } ] }, "aggregation": { "field": [ { "property": "name", "sequence": 1, "size": 6000 }, { "property": "src_ip", "sequence": 1, "size": 6000 }, { "property": "dst_ip", "sequence": 1, "size": 6000 }  , { "property": "local_color", "sequence": 1, "size": 6000 }, { "property": "remote_color", "sequence": 1, "size": 6000 }, { "property": "local_system_ip", "sequence": 1, "size": 6000 }, { "property": "remote_system_ip", "sequence": 1, "size": 6000 } ], "metrics": [ { "property": "loss_percentage", "type": "avg" }, { "property": "vqoe_score", "type": "avg" }, { "property": "latency", "type": "avg" }, { "property": "jitter", "type": "avg" }, { "property": "tx_octets", "type": "avg" },  { "property": "rx_octets", "type": "avg" } ] } }'
-        response = self.session.post(url, data=payload, headers={'Content-Type': 'application/json'}, verify=False)
-        
-        return response.json()['data']            
+        try:
+            url = '/dataservice/statistics/approute/fec/aggregation'
+            url = self.base_url_str+url
+            payload = '{ "query": { "condition": "AND", "rules": [ { "value": [ "3" ], "field": "entry_time", "type": "date", "operator": "last_n_hours" }, { "value": [ "'+ip+'" ], "field": "vdevice_name", "type": "string", "operator": "in" } ] }, "aggregation": { "field": [ { "property": "name", "sequence": 1, "size": 6000 }, { "property": "src_ip", "sequence": 1, "size": 6000 }, { "property": "dst_ip", "sequence": 1, "size": 6000 }  , { "property": "local_color", "sequence": 1, "size": 6000 }, { "property": "remote_color", "sequence": 1, "size": 6000 }, { "property": "local_system_ip", "sequence": 1, "size": 6000 }, { "property": "remote_system_ip", "sequence": 1, "size": 6000 } ], "metrics": [ { "property": "loss_percentage", "type": "avg" }, { "property": "vqoe_score", "type": "avg" }, { "property": "latency", "type": "avg" }, { "property": "jitter", "type": "avg" }, { "property": "tx_octets", "type": "avg" },  { "property": "rx_octets", "type": "avg" } ] } }'
+            response = self.session.post(url, data=payload, headers={'Content-Type': 'application/json'}, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("tunnels conection is down. %s" %e)
+            return {}
 
 
     def reachable(self, personality):
-        url = '/dataservice/device/reachable?personality='+personality
-        url = self.base_url_str+url 
-
-        response = self.session.get(url, verify=False)
-
-        return response.json()['data']
+        try:
+            url = '/dataservice/device/reachable?personality='+personality
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("reachable conection is down. %s" %e)
+            return {}
 
 
     def unReachable(self, personality):
-        url = '/dataservice/device/unreachable?personality='+personality
-        url = self.base_url_str+url 
-        response = self.session.get(url, verify=False)
+        try:
+            url = '/dataservice/device/unreachable?personality='+personality
+            url = self.base_url_str+url 
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("unReachable conection is down. %s" %e)
+            return {}
 
-        return response.json()['data']
 
     def health(self, personality):
-        url = '/dataservice/device/hardwarehealth/detail?state='+personality
-        url = self.base_url_str+url 
-
-        response = self.session.get(url, verify=False)
-
-        return response.json()['data']
+        try:
+            url = '/dataservice/device/hardwarehealth/detail?state='+personality
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("health conection is down. %s" %e)
+            return {}
 
         
     def network(self, personality):
-        url = '/dataservice/device/control/networksummary?state='+personality
-
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data']
+        try:
+            url = '/dataservice/device/control/networksummary?state='+personality
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("network conection is down. %s" %e)
+            return {}
 
     def certs(self):
-        url = '/dataservice/certificate/stats/detail?status=warning'
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data']
+        try:
+            url = '/dataservice/certificate/stats/detail?status=warning'
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("certs conection is down. %s" %e)
+            return {}
 
     
     def boot(self):
-        url = '/dataservice/device/reboothistory/details'
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data']
+        try:
+            url = '/dataservice/device/reboothistory/details'
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("boot conection is down. %s" %e)
+            return {}
+
 
     def alerts(self, start, end, count='10000'):
-
-        url = '/dataservice/data/device/statistics/alarm?startDate='+str(end)+'&endDate='+str(start)+'&count='+count
-        url = self.base_url_str+url
-        
-        
-
-        response = self.session.get(url, verify=False)
-
-        return  response.json()['data']
-        
-
+        try:
+            url = '/dataservice/data/device/statistics/alarm?startDate='+str(end)+'&endDate='+str(start)+'&count='+count
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return  response.json()['data']
+        except Exception as e:
+            self.log_conn("alerts conection is down. %s" %e)
+            return {}
         
 
     def alertsEx(self, count='10000'):
-        url = '/dataservice/data/device/statistics/alarm?startDate=2020-11-26T10:10:59&endDate=2020-11-26T10:20:59&count='+count
-        url = self.base_url_str+url
-        response = self.session.get(url, verify=False)
-        return response.json()['data']
-        
+        try:
+            url = '/dataservice/data/device/statistics/alarm?startDate=2020-11-26T10:10:59&endDate=2020-11-26T10:20:59&count='+count
+            url = self.base_url_str+url
+            response = self.session.get(url, verify=False)
+            return response.json()['data']
+        except Exception as e:
+            self.log_conn("alertsEx conection is down. %s" %e)
+            return {}
